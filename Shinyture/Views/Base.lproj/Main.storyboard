@@ -156,6 +156,9 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="BEZ-sK-9Ep"/>
                     </view>
+                    <connections>
+                        <outlet property="applePayButtonContainer" destination="VAh-cT-d51" id="RUk-4Y-jXO"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Arb-fZ-Q5O" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

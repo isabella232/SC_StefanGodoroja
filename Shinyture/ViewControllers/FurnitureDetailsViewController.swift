@@ -27,27 +27,80 @@
 /// THE SOFTWARE.
 
 import UIKit
+import PassKit
+
+struct ApplePayKey {
+  static let merchantID = "merchant.rw.shinyture.raywenderlich"
+}
 
 class FurnitureDetailsViewController: UIViewController {
-        
-    override func viewDidLoad() {
-        super.viewDidLoad()        
-    }
+  
+  let SupportedPaymentNetworks = [PKPaymentNetwork.visa, PKPaymentNetwork.masterCard, PKPaymentNetwork.amex]
+  
+  var paymentController: PKPaymentAuthorizationController?
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    @IBOutlet var applePayButtonContainer: UIView!
+  
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    
+    var button: UIButton?
+    
+    if PKPaymentAuthorizationController.canMakePayments() {
+      button = PKPaymentButton(paymentButtonType: .buy, paymentButtonStyle: .black)
+      button?.addTarget(self, action: #selector(FurnitureDetailsViewController.payPressed), for: .touchUpInside)
+    } else if PKPaymentAuthorizationController.canMakePayments(usingNetworks: SupportedPaymentNetworks) {
+      button = PKPaymentButton(paymentButtonType: .setUp, paymentButtonStyle: .black)
+      button?.addTarget(self, action: #selector(FurnitureDetailsViewController.setupPressed), for: .touchUpInside)
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    if button != nil {
+      button!.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin]
+      applePayButtonContainer.addSubview(button!)
     }
-    */
+    
+  }
+  
+  @objc func payPressed() {
+    let request = PKPaymentRequest()
+    request.merchantIdentifier = ApplePayKey.merchantID
+    request.merchantCapabilities = .capability3DS
+    request.countryCode = "US"
+    request.currencyCode = "USD"
+    request.supportedNetworks = SupportedPaymentNetworks
+    
+    let paymentItem = PKPaymentSummaryItem(label: "Chair", amount: NSDecimalNumber(value: 12.0), type: .final)
+    request.paymentSummaryItems = [paymentItem]
+    
+    paymentController = PKPaymentAuthorizationController(paymentRequest: request)
+    paymentController?.delegate = self
+    paymentController?.present(completion: { (present) in
+      
+    })
 
+  }
+  
+  @objc func setupPressed() {
+    
+  }
+}
+
+extension FurnitureDetailsViewController: PKPaymentAuthorizationControllerDelegate {
+  
+
+  func paymentAuthorizationController(_ controller: PKPaymentAuthorizationController, didAuthorizePayment payment: PKPayment, completion: @escaping (PKPaymentAuthorizationStatus) -> Void) {
+    
+    print(payment.token)
+    print("didAuthorizePayment")
+    completion(.success)
+  }
+  
+  func paymentAuthorizationControllerDidFinish(_ controller: PKPaymentAuthorizationController) {
+    controller.dismiss {
+      print("paymentAuthorizationControllerDidFinish")
+      controller.dismiss(completion: nil)
+
+    }
+  }
+  
 }
