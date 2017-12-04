@@ -99,10 +99,7 @@ extension FurnitureListViewController: UITableViewDataSource {
       cell.showFurnitureImage(named: imageName)
     }
     
-    if let name = furnitureItem.name {
-      cell.showFurnitureName(name: name)
-    }
-    
+    cell.showFurnitureName(name: furnitureItem.name)
     cell.showFurniture(price: furnitureItem.price.doubleValue)
     
     return cell

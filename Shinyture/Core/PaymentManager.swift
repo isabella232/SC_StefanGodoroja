@@ -28,12 +28,85 @@
 
 import PassKit
 
-struct ApplePayKey {
-  static let merchantID = "merchant.rw.shinyture.raywenderlich"
+typealias PaymentManagerCompletionHandler = (Bool) -> Void
+
+class PaymentManager: NSObject {
+  let MerchantID = "merchant.rw.shinyture.raywenderlich"
+  let SupportedNetworks: [PKPaymentNetwork] = [.visa, .masterCard, .amex]
+  
+  var completionHandler: PaymentManagerCompletionHandler?
+  
+  private var paymentController: PKPaymentAuthorizationController?
+  private var shouldDismissAuthorizationController = true
+  
+  func pay(forFurnitureItem item: Furniture?, completion: @escaping PaymentManagerCompletionHandler) {
+    completionHandler = completion
+    
+    if let item = item {
+      let request = PKPaymentRequest()
+      request.merchantIdentifier = MerchantID
+      request.merchantCapabilities = .capability3DS
+      request.countryCode = "US"
+      request.currencyCode = "USD"
+      request.supportedNetworks = SupportedNetworks
+      request.requiredBillingContactFields = [.phoneNumber, .name]
+      request.requiredShippingContactFields = [.postalAddress, .phoneNumber, .name]
+      
+      var payments: [PKPaymentSummaryItem] = []
+      
+      let itemPayment = PKPaymentSummaryItem(label: item.name,
+                                             amount: item.price,
+                                             type: .final)
+      payments.append(itemPayment)
+      
+      if item.shippingPrice.doubleValue > 0 {
+        let shippingPayment = PKPaymentSummaryItem(label: "Shipping",
+                                                   amount: item.shippingPrice,
+                                                   type: .final)
+        payments.append(shippingPayment)
+      }
+      
+      if item.discountValue.doubleValue > 0 {
+        let discountPayment = PKPaymentSummaryItem(label: "Discout",
+                                                   amount: item.discountValue.negative(),
+                                                   type: .final)
+        payments.append(discountPayment)
+      }
+      
+      let totalPrice = item.price.adding(item.shippingPrice).subtracting(item.discountValue)
+      let totalPayment = PKPaymentSummaryItem(label: "Shinyture",
+                                              amount: totalPrice,
+                                              type: .final)
+      payments.append(totalPayment)
+      request.paymentSummaryItems = payments
+      
+      paymentController = PKPaymentAuthorizationController(paymentRequest: request)
+      paymentController?.delegate = self
+      paymentController?.present(completion: nil)
+    }
+  }
 }
 
-class PaymentManager {
+// MARK: PKPaymentAuthorizationControllerDelegate
+extension PaymentManager: PKPaymentAuthorizationControllerDelegate {
   
-  let SupportedNetworks: [PKPaymentNetwork] = [.visa, .masterCard, .amex]
+  func paymentAuthorizationController(_ controller: PKPaymentAuthorizationController, didAuthorizePayment payment: PKPayment, completion: @escaping (PKPaymentAuthorizationStatus) -> Void) {
+    
+    print(payment.token)
+    print("didAuthorizePayment")
+    completion(.success)
+  }
+  
+  func paymentAuthorizationControllerDidFinish(_ controller: PKPaymentAuthorizationController) {
+    
+    if shouldDismissAuthorizationController {
+      controller.dismiss {
+        DispatchQueue.main.async {
+          self.shouldDismissAuthorizationController = false
+          self.completionHandler?(true)
+        }
+      }
+    }
+  }
   
 }

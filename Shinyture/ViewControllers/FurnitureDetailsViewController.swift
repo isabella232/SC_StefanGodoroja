@@ -33,7 +33,6 @@ class FurnitureDetailsViewController: UIViewController {
   var furnitureItem: Furniture?
   
   private lazy var paymentManager = PaymentManager()
-  private var paymentController: PKPaymentAuthorizationController?
   
   @IBOutlet var furnitureImageView: FurnitureImageView!
   @IBOutlet private var furnitureShippingLabel: UILabel!
@@ -47,22 +46,13 @@ class FurnitureDetailsViewController: UIViewController {
   }
   
   @objc func payPressed() {
-    let request = PKPaymentRequest()
-    request.merchantIdentifier = ApplePayKey.merchantID
-    request.merchantCapabilities = .capability3DS
-    request.countryCode = "US"
-    request.currencyCode = "USD"
-    request.supportedNetworks = paymentManager.SupportedNetworks
-    
-    let paymentItem = PKPaymentSummaryItem(label: "Chair", amount: NSDecimalNumber(value: 12.0), type: .final)
-    request.paymentSummaryItems = [paymentItem]
-    
-    paymentController = PKPaymentAuthorizationController(paymentRequest: request)
-    paymentController?.delegate = self
-    paymentController?.present(completion: { (present) in
+    paymentManager.pay(forFurnitureItem: furnitureItem) { (success) in
       
-    })
-    
+      if success {
+        self.performSegue(withIdentifier: "show.paymentconfirmation.view", sender: nil)
+      }
+      
+    }
   }
   
   @objc func setupPressed() {
@@ -113,27 +103,5 @@ class FurnitureDetailsViewController: UIViewController {
       maker.right.equalTo(view.snp.rightMargin)
       maker.bottom.equalTo(view.snp.bottomMargin)
     })
-    
   }
-  
-}
-
-// MARK: PKPaymentAuthorizationControllerDelegate
-extension FurnitureDetailsViewController: PKPaymentAuthorizationControllerDelegate {
-  
-  func paymentAuthorizationController(_ controller: PKPaymentAuthorizationController, didAuthorizePayment payment: PKPayment, completion: @escaping (PKPaymentAuthorizationStatus) -> Void) {
-    
-    print(payment.token)
-    print("didAuthorizePayment")
-    completion(.success)
-  }
-  
-  func paymentAuthorizationControllerDidFinish(_ controller: PKPaymentAuthorizationController) {
-    controller.dismiss {
-      DispatchQueue.main.async {
-        self.performSegue(withIdentifier: "show.paymentconfirmation.view", sender: nil)
-      }
-    }
-  }
-  
 }

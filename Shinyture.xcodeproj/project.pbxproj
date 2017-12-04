@@ -18,6 +18,7 @@
 		AB65FC221FD4DBC300F4AB42 /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB65FC211FD4DBC300F4AB42 /* ComplicationController.swift */; };
 		AB65FC241FD4DBC300F4AB42 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AB65FC231FD4DBC300F4AB42 /* Assets.xcassets */; };
 		AB65FC281FD4DBC300F4AB42 /* ShinytureWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = AB65FC0C1FD4DBC300F4AB42 /* ShinytureWatch.app */; };
+		AB65FC341FD5377900F4AB42 /* NSDecimalNumberExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB65FC331FD5377900F4AB42 /* NSDecimalNumberExtension.swift */; };
 		ABDE323E1FD0A36E00EB0E14 /* FurnitureListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABDE323D1FD0A36E00EB0E14 /* FurnitureListViewController.swift */; };
 		ABDE32401FD0A39200EB0E14 /* FurnitureDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABDE323F1FD0A39200EB0E14 /* FurnitureDetailsViewController.swift */; };
 		ABDE32421FD0A3BB00EB0E14 /* CreateAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABDE32411FD0A3BB00EB0E14 /* CreateAccountViewController.swift */; };
@@ -123,6 +124,8 @@
 		AB65FC211FD4DBC300F4AB42 /* ComplicationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationController.swift; sourceTree = "<group>"; };
 		AB65FC231FD4DBC300F4AB42 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AB65FC251FD4DBC300F4AB42 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AB65FC311FD4DE4D00F4AB42 /* ShinytureWatch Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "ShinytureWatch Extension.entitlements"; sourceTree = "<group>"; };
+		AB65FC331FD5377900F4AB42 /* NSDecimalNumberExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSDecimalNumberExtension.swift; sourceTree = "<group>"; };
 		ABDE323D1FD0A36E00EB0E14 /* FurnitureListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FurnitureListViewController.swift; sourceTree = "<group>"; };
 		ABDE323F1FD0A39200EB0E14 /* FurnitureDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FurnitureDetailsViewController.swift; sourceTree = "<group>"; };
 		ABDE32411FD0A3BB00EB0E14 /* CreateAccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountViewController.swift; sourceTree = "<group>"; };
@@ -266,6 +269,7 @@
 		AB65FC1C1FD4DBC300F4AB42 /* ShinytureWatch Extension */ = {
 			isa = PBXGroup;
 			children = (
+				AB65FC311FD4DE4D00F4AB42 /* ShinytureWatch Extension.entitlements */,
 				AB65FC1D1FD4DBC300F4AB42 /* InterfaceController.swift */,
 				AB65FC1F1FD4DBC300F4AB42 /* ExtensionDelegate.swift */,
 				AB65FC211FD4DBC300F4AB42 /* ComplicationController.swift */,
@@ -273,6 +277,14 @@
 				AB65FC251FD4DBC300F4AB42 /* Info.plist */,
 			);
 			path = "ShinytureWatch Extension";
+			sourceTree = "<group>";
+		};
+		AB65FC321FD5374500F4AB42 /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				AB65FC331FD5377900F4AB42 /* NSDecimalNumberExtension.swift */,
+			);
+			path = Utility;
 			sourceTree = "<group>";
 		};
 		ABDE323C1FD0A30A00EB0E14 /* ViewControllers */ = {
@@ -377,10 +389,11 @@
 			isa = PBXGroup;
 			children = (
 				D2A5F2201F4A96D0005CD714 /* AppDelegate.swift */,
-				AB39DA581FD43CC2004F8D95 /* Config */,
 				AB65FC031FD49CA500F4AB42 /* Core */,
 				ABDE323C1FD0A30A00EB0E14 /* ViewControllers */,
 				AB39DA561FD43C72004F8D95 /* Views */,
+				AB65FC321FD5374500F4AB42 /* Utility */,
+				AB39DA581FD43CC2004F8D95 /* Config */,
 				AB39DA571FD43CB1004F8D95 /* Resources */,
 				ABF4F1F31FD2EBA700AFD6C0 /* Libraries */,
 			);
@@ -460,6 +473,11 @@
 					AB65FC171FD4DBC300F4AB42 = {
 						CreatedOnToolsVersion = 9.1;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.ApplePay = {
+								enabled = 1;
+							};
+						};
 					};
 					D2A5F1FF1F4A9144005CD714 = {
 						CreatedOnToolsVersion = 9.0;
@@ -559,6 +577,7 @@
 				ABF4F22A1FD2F4FB00AFD6C0 /* ConstraintInsetTarget.swift in Sources */,
 				ABF4F2381FD2F4FB00AFD6C0 /* ConstraintOffsetTarget.swift in Sources */,
 				ABF4F22C1FD2F4FB00AFD6C0 /* ConstraintLayoutGuide+Extensions.swift in Sources */,
+				AB65FC341FD5377900F4AB42 /* NSDecimalNumberExtension.swift in Sources */,
 				ABF4F2261FD2F4FB00AFD6C0 /* ConstraintConstantTarget.swift in Sources */,
 				ABF4F2341FD2F4FB00AFD6C0 /* ConstraintMakerFinalizable.swift in Sources */,
 				ABF4F2241FD2F4FB00AFD6C0 /* ConstraintAttributes.swift in Sources */,
@@ -625,6 +644,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CODE_SIGN_ENTITLEMENTS = "ShinytureWatch Extension/ShinytureWatch Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7YX3D8UMCU;
 				INFOPLIST_FILE = "ShinytureWatch Extension/Info.plist";
@@ -643,6 +663,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CODE_SIGN_ENTITLEMENTS = "ShinytureWatch Extension/ShinytureWatch Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7YX3D8UMCU;
 				INFOPLIST_FILE = "ShinytureWatch Extension/Info.plist";

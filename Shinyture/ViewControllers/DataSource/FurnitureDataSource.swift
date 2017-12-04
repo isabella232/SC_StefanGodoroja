@@ -30,7 +30,7 @@ import UIKit
 
 struct Furniture {
   var coverImageName: String?
-  var name: String?
+  var name = "Item"
   var price: NSDecimalNumber = 0
   var description: String?
   var shippingPrice: NSDecimalNumber = 0
