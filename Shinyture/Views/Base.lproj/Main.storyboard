@@ -22,7 +22,7 @@
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ct6-Yj-zgy">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="498"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="488"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="intexChair" translatesAutoresizingMaskIntoConstraints="NO" id="cwB-89-OsV" customClass="FurnitureImageView" customModule="Shinyture" customModuleProvider="target">
                                                 <rect key="frame" x="10" y="10" width="355" height="311"/>
@@ -94,18 +94,29 @@
                                                 <state key="normal" title="DISCOUNT"/>
                                             </button>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ha4-6L-d4E">
-                                                <rect key="frame" x="30" y="448" width="315" height="40"/>
+                                                <rect key="frame" x="187.5" y="448" width="157.5" height="30"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="40" id="cfc-9V-woh"/>
+                                                    <constraint firstAttribute="height" constant="30" id="cfc-9V-woh"/>
                                                 </constraints>
                                             </view>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vgP-Wd-jjF">
+                                                <rect key="frame" x="20" y="448" width="157.5" height="30"/>
+                                                <color key="backgroundColor" red="0.1333333333" green="0.5450980392" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="30" id="1EV-1Q-eP5"/>
+                                                </constraints>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
+                                                <state key="normal" title="Buy" image="cart">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstItem="6IP-3x-h5j" firstAttribute="leading" secondItem="ct6-Yj-zgy" secondAttribute="leading" constant="10" id="2Gi-oS-h0u"/>
                                             <constraint firstItem="fUd-WB-gi3" firstAttribute="top" secondItem="zQm-Hh-kgZ" secondAttribute="bottom" id="3hf-gv-5fN"/>
-                                            <constraint firstItem="ha4-6L-d4E" firstAttribute="leading" secondItem="ct6-Yj-zgy" secondAttribute="leading" constant="30" id="5YZ-Va-qQy"/>
+                                            <constraint firstItem="ha4-6L-d4E" firstAttribute="leading" secondItem="vgP-Wd-jjF" secondAttribute="trailing" constant="10" id="5YZ-Va-qQy"/>
                                             <constraint firstItem="ZrJ-Xc-QXp" firstAttribute="top" secondItem="6IP-3x-h5j" secondAttribute="bottom" constant="5" id="5t5-np-Jhu"/>
                                             <constraint firstItem="rgo-DC-XwU" firstAttribute="top" secondItem="cwB-89-OsV" secondAttribute="bottom" constant="-5" id="6Jt-IO-hWf"/>
                                             <constraint firstItem="fUd-WB-gi3" firstAttribute="leading" secondItem="A79-Ml-GUY" secondAttribute="trailing" constant="10" id="7jK-Em-42t"/>
@@ -114,8 +125,11 @@
                                             <constraint firstItem="4vK-oO-ac2" firstAttribute="top" secondItem="cwB-89-OsV" secondAttribute="bottom" constant="25" id="Bhj-s1-MTP"/>
                                             <constraint firstItem="A79-Ml-GUY" firstAttribute="leading" secondItem="4vK-oO-ac2" secondAttribute="trailing" constant="10" id="GN5-77-xSh"/>
                                             <constraint firstItem="fUd-WB-gi3" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="ct6-Yj-zgy" secondAttribute="leading" constant="20" symbolic="YES" id="Kqq-SE-vJu"/>
+                                            <constraint firstItem="vgP-Wd-jjF" firstAttribute="leading" secondItem="ct6-Yj-zgy" secondAttribute="leading" constant="20" id="Mud-RX-yk4"/>
+                                            <constraint firstAttribute="bottom" secondItem="vgP-Wd-jjF" secondAttribute="bottom" constant="10" id="Ns4-p9-0pQ"/>
                                             <constraint firstItem="cwB-89-OsV" firstAttribute="leading" secondItem="ct6-Yj-zgy" secondAttribute="leading" constant="10" id="QjT-ac-suG"/>
                                             <constraint firstAttribute="trailing" secondItem="zQm-Hh-kgZ" secondAttribute="trailing" constant="10" id="Rfq-df-iIY"/>
+                                            <constraint firstItem="ha4-6L-d4E" firstAttribute="width" secondItem="vgP-Wd-jjF" secondAttribute="width" id="WWI-ju-egC"/>
                                             <constraint firstAttribute="height" priority="250" constant="601" id="a5n-Z2-5bi"/>
                                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="6IP-3x-h5j" secondAttribute="trailing" constant="20" symbolic="YES" id="aMb-Ct-6UK"/>
                                             <constraint firstItem="cwB-89-OsV" firstAttribute="top" secondItem="ct6-Yj-zgy" secondAttribute="top" constant="10" id="fTO-U0-SGV"/>
@@ -153,6 +167,7 @@
                     </view>
                     <connections>
                         <outlet property="applePayButtonContainer" destination="ha4-6L-d4E" id="ivs-tA-keJ"/>
+                        <outlet property="defaultPaymentButton" destination="vgP-Wd-jjF" id="G0j-nf-4zc"/>
                         <outlet property="discountButton" destination="A79-Ml-GUY" id="DBs-i2-2TD"/>
                         <outlet property="furnitureDescriptionLabel" destination="ZrJ-Xc-QXp" id="K2l-eq-kLj"/>
                         <outlet property="furnitureImageView" destination="cwB-89-OsV" id="Pch-F8-JZZ"/>
@@ -432,6 +447,7 @@
     </scenes>
     <resources>
         <image name="account-no-photo" width="25" height="25"/>
+        <image name="cart" width="15" height="15"/>
         <image name="detail-arrow" width="12" height="12"/>
         <image name="intexChair" width="1000" height="1000"/>
         <image name="search-icon" width="20" height="20"/>
