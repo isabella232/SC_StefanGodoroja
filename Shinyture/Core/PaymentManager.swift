@@ -49,8 +49,8 @@ class PaymentManager: NSObject {
       request.countryCode = "US"
       request.currencyCode = "USD"
       request.supportedNetworks = SupportedNetworks
-      request.requiredBillingContactFields = [.phoneNumber, .name]
-      request.requiredShippingContactFields = [.postalAddress, .phoneNumber, .name]
+      //request.requiredBillingContactFields = [.phoneNumber, .name]
+      //request.requiredShippingContactFields = [.postalAddress, .phoneNumber, .name]
       
       var payments: [PKPaymentSummaryItem] = []
       

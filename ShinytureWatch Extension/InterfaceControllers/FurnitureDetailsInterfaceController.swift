@@ -28,24 +28,26 @@
 
 import WatchKit
 import Foundation
+import PassKit
 
-
-class InterfaceController: WKInterfaceController {
-
-    override func awake(withContext context: Any?) {
-        super.awake(withContext: context)
-        
-        // Configure interface objects here.
-    }
+class FurnitureDetailsInterfaceController: WKInterfaceController {
+  private lazy var paymentManager = PaymentManager()
+  private var furnitureItem: Furniture?
+  
+  override func awake(withContext context: Any?) {
     
-    override func willActivate() {
-        // This method is called when watch view controller is about to be visible to user
-        super.willActivate()
+    if let item = context as? Furniture {
+      furnitureItem = item
     }
-    
-    override func didDeactivate() {
-        // This method is called when watch view controller is no longer visible
-        super.didDeactivate()
+  }
+  
+  @IBAction func payButtonPressed(sender: AnyObject) {
+    paymentManager.pay(forFurnitureItem: furnitureItem) { (success) in
+      
+      if success {
+        self.pushController(withName: "PaymentConfirmation", context: nil)
+      }
     }
-
+  }
+  
 }
