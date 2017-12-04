@@ -35,11 +35,11 @@ class PaymentManager: NSObject {
   let SupportedNetworks: [PKPaymentNetwork] = [.visa, .masterCard, .amex]
   
   var completionHandler: PaymentManagerCompletionHandler?
-  var paymentResult = PKPaymentAuthorizationResult(status: .failure, errors: nil)
-  var registrationContact = Contact()
-  var shippingMethods: [PKShippingMethod] = []
-  var paymentItems: [PKPaymentSummaryItem] = []
   
+  private var paymentStatus = PKPaymentAuthorizationStatus.failure
+  private var registrationContact = Contact()
+  private var shippingMethods: [PKShippingMethod] = []
+  private var paymentItems: [PKPaymentSummaryItem] = []
   private var paymentController: PKPaymentAuthorizationController?
   
   func pay(forFurnitureItem item: Furniture?, completion: @escaping PaymentManagerCompletionHandler) {
@@ -124,7 +124,7 @@ extension PaymentManager: PKPaymentAuthorizationControllerDelegate {
     controller.dismiss {
       DispatchQueue.main.async {
         
-        if self.paymentResult.status == .success {
+        if self.paymentStatus == .success {
           self.completionHandler?(true, self.registrationContact)
         } else {
           self.completionHandler?(false, self.registrationContact)
@@ -132,6 +132,23 @@ extension PaymentManager: PKPaymentAuthorizationControllerDelegate {
       }
     }
     
+  }
+  
+  func paymentAuthorizationController(_ controller: PKPaymentAuthorizationController, didSelectPaymentMethod paymentMethod: PKPaymentMethod, handler completion: @escaping (PKPaymentRequestPaymentMethodUpdate) -> Void) {
+    
+    if paymentMethod.type == .debit {
+      var discountedItems = paymentItems
+      let discountItem = PKPaymentSummaryItem(label: "Debit Card Discount", amount: NSDecimalNumber(string: "-5.00"))
+      discountedItems.insert(discountItem, at: paymentItems.count - 1)
+      
+      if let totalPaidItem = paymentItems.last {
+        totalPaidItem.amount = totalPaidItem.amount.subtracting(NSDecimalNumber(string: "5.00"))
+      }
+      
+      completion(PKPaymentRequestPaymentMethodUpdate(paymentSummaryItems: discountedItems))
+    } else {
+      completion(PKPaymentRequestPaymentMethodUpdate(paymentSummaryItems: paymentItems))
+    }
   }
   
   func paymentAuthorizationController(_ controller: PKPaymentAuthorizationController, didAuthorizePayment payment: PKPayment, handler completion: @escaping (PKPaymentAuthorizationResult) -> Void) {
@@ -149,12 +166,11 @@ extension PaymentManager: PKPaymentAuthorizationControllerDelegate {
       registrationContact.firstName = payment.shippingContact?.name?.givenName
       registrationContact.lastName = payment.shippingContact?.name?.familyName
       registrationContact.email = payment.shippingContact?.emailAddress
-      paymentResult.status = .success
+      paymentStatus = .success
     } else {
-      paymentResult.errors = errors
-      paymentResult.status = .failure
+      paymentStatus = .failure
     }
- 
-    completion(paymentResult)
+    
+    completion(PKPaymentAuthorizationResult(status: paymentStatus, errors: errors))
   }
 }
