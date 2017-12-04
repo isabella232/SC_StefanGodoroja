@@ -35,15 +35,18 @@ class FurnitureDetailsViewController: UIViewController {
   private lazy var paymentManager = PaymentManager()
   private var registrationContact: Contact?
   
-  @IBOutlet var furnitureImageView: FurnitureImageView!
+  @IBOutlet private var applePayButtonContainer: UIView!
+  @IBOutlet private var furnitureImageView: FurnitureImageView!
   @IBOutlet private var furnitureShippingLabel: UILabel!
   @IBOutlet private var furniturePriceLabel: UILabel!
   @IBOutlet private var furnitureDescriptionLabel: UILabel!
+  @IBOutlet private var discountButton: UIButton!
   
   override func viewDidLoad() {
     super.viewDidLoad()
     showFurnitureDetails()
-    addPaymentButtons()
+    addApplePayButton()
+    styleDiscountButton()
   }
   
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -66,10 +69,6 @@ class FurnitureDetailsViewController: UIViewController {
     }
   }
   
-  @objc func setupPressed() {
-    
-  }
-  
   private func showFurnitureDetails() {
     if let furniture = furnitureItem {
       
@@ -86,33 +85,33 @@ class FurnitureDetailsViewController: UIViewController {
         furnitureShippingLabel.text = "Free Shipping"
       }
       
+      if furniture.discountValue.doubleValue == 0.0 {
+        discountButton.isHidden = true
+      }
     }
   }
   
-  private func addPaymentButtons() {
-    // Traditional Payment Button
-    let defaultPaymentButton = UIButton(type: .custom)
-    defaultPaymentButton.setImage(UIImage(named: "cart"), for: .normal)
-    defaultPaymentButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 15)
-    defaultPaymentButton.titleLabel?.text = "Buy"
-    defaultPaymentButton.setTitleColor(.white, for: .normal)
+  private func styleDiscountButton() {
+    let discountButtonBorderColor = UIColor(red: (55/255.0),
+                                            green: (51/255.0),
+                                            blue: (52/255.0),
+                                            alpha: 1.0)
+    discountButton.round(radius: 4, withBorderColor: discountButtonBorderColor)
+  }
+  
+  private func addApplePayButton() {
     
-    // Apple Pay Button
     var applePayButton: UIButton?
     if PKPaymentAuthorizationController.canMakePayments() {
       applePayButton = PKPaymentButton(paymentButtonType: .buy, paymentButtonStyle: .black)
       applePayButton?.addTarget(self, action: #selector(payPressed), for: .touchUpInside)
     } else if PKPaymentAuthorizationController.canMakePayments(usingNetworks: paymentManager.SupportedNetworks) {
       applePayButton = PKPaymentButton(paymentButtonType: .setUp, paymentButtonStyle: .black)
-      applePayButton?.addTarget(self, action: #selector(setupPressed), for: .touchUpInside)
+      applePayButton?.addTarget(self, action: #selector(payPressed), for: .touchUpInside)
     }
-    
-    view.addSubview(applePayButton!)
-    
-    applePayButton?.snp.makeConstraints({ (maker) in
-      maker.size.equalTo((applePayButton?.frame.size)!)
-      maker.right.equalTo(view.snp.rightMargin)
-      maker.bottom.equalTo(view.snp.bottomMargin)
-    })
+
+    if let applePayButton = applePayButton {
+      applePayButtonContainer.addSubview(applePayButton)
+    }
   }
 }

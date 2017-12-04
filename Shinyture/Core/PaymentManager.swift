@@ -35,8 +35,9 @@ class PaymentManager: NSObject {
   let SupportedNetworks: [PKPaymentNetwork] = [.visa, .masterCard, .amex]
   
   var completionHandler: PaymentManagerCompletionHandler?
+  var paymentResult = PKPaymentAuthorizationResult(status: .failure, errors: nil)
+  var registrationContact = Contact()
   
-  private var registrationContact = Contact()
   private var paymentController: PKPaymentAuthorizationController?
   private var shouldDismissAuthorizationController = true
   
@@ -91,27 +92,41 @@ class PaymentManager: NSObject {
 // MARK: PKPaymentAuthorizationControllerDelegate
 extension PaymentManager: PKPaymentAuthorizationControllerDelegate {
   
-  func paymentAuthorizationController(_ controller: PKPaymentAuthorizationController, didAuthorizePayment payment: PKPayment, completion: @escaping (PKPaymentAuthorizationStatus) -> Void) {
-    
-    registrationContact.firstName = payment.shippingContact?.name?.givenName
-    registrationContact.lastName = payment.shippingContact?.name?.familyName
-    registrationContact.email = payment.shippingContact?.emailAddress
-
-    print(payment.token)
-    print("didAuthorizePayment")
-    completion(.success)
-  }
-  
   func paymentAuthorizationControllerDidFinish(_ controller: PKPaymentAuthorizationController) {
     
     if shouldDismissAuthorizationController {
       controller.dismiss {
         DispatchQueue.main.async {
           self.shouldDismissAuthorizationController = false
-          self.completionHandler?(true, self.registrationContact)
+          
+          if self.paymentResult.status == .success {
+            self.completionHandler?(true, self.registrationContact)
+          } else {
+            self.completionHandler?(false, self.registrationContact)
+          }
         }
       }
     }
   }
   
+  func paymentAuthorizationController(_ controller: PKPaymentAuthorizationController, didAuthorizePayment payment: PKPayment, handler completion: @escaping (PKPaymentAuthorizationResult) -> Void) {
+    
+    if payment.billingContact?.name?.familyName == nil {
+      let error = PKPaymentRequest.paymentContactInvalidError(withContactField: PKContactField.name, localizedDescription: "Billing requires last name")
+      paymentResult.status = .failure
+      paymentResult.errors = [error]
+    } else if payment.shippingContact?.postalAddress?.city == nil {
+      let cityAddressError = PKPaymentRequest.paymentShippingAddressInvalidError(withKey: CNPostalAddressCityKey, localizedDescription:"Shipping requires your city")
+      paymentResult.errors = [cityAddressError]
+      paymentResult.status = .failure
+    } else {
+      registrationContact.firstName = payment.shippingContact?.name?.givenName
+      registrationContact.lastName = payment.shippingContact?.name?.familyName
+      registrationContact.email = payment.shippingContact?.emailAddress
+      
+      paymentResult.status = .success
+    }
+    
+    completion(paymentResult)
+  }
 }

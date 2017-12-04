@@ -30,6 +30,14 @@ import UIKit
 
 extension UIView {
   
+  func round(radius: CGFloat, withBorderColor borderColor: UIColor) {
+    layer.borderWidth = 1
+    layer.masksToBounds = false
+    layer.borderColor = borderColor.cgColor
+    layer.cornerRadius = radius
+    clipsToBounds = true
+  }
+  
   func round() {
     layer.borderWidth = 1
     layer.masksToBounds = false

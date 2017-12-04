@@ -321,13 +321,29 @@
 			path = CreateAccount;
 			sourceTree = "<group>";
 		};
+		AB65FC471FD58A5E00F4AB42 /* FurnitureDetails */ = {
+			isa = PBXGroup;
+			children = (
+				ABDE323F1FD0A39200EB0E14 /* FurnitureDetailsViewController.swift */,
+			);
+			path = FurnitureDetails;
+			sourceTree = "<group>";
+		};
+		AB65FC481FD58A6C00F4AB42 /* PaymentConfirmation */ = {
+			isa = PBXGroup;
+			children = (
+				ABDE32431FD0A3CA00EB0E14 /* PaymentConfirmationViewController.swift */,
+			);
+			path = PaymentConfirmation;
+			sourceTree = "<group>";
+		};
 		ABDE323C1FD0A30A00EB0E14 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				AB65FC481FD58A6C00F4AB42 /* PaymentConfirmation */,
+				AB65FC471FD58A5E00F4AB42 /* FurnitureDetails */,
 				AB65FC061FD4B1B800F4AB42 /* FurnitureList */,
 				AB65FC411FD57B2A00F4AB42 /* CreateAccount */,
-				ABDE323F1FD0A39200EB0E14 /* FurnitureDetailsViewController.swift */,
-				ABDE32431FD0A3CA00EB0E14 /* PaymentConfirmationViewController.swift */,
 				AB39DA521FD3EDE2004F8D95 /* DataSource */,
 			);
 			path = ViewControllers;
