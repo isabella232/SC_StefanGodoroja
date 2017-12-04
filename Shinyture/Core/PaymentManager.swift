@@ -109,23 +109,39 @@ extension PaymentManager: PKPaymentAuthorizationControllerDelegate {
     }
   }
   
+  func paymentAuthorizationController(_ controller: PKPaymentAuthorizationController, didSelectShippingContact contact: PKContact, handler completion: @escaping (PKPaymentRequestShippingContactUpdate) -> Void) {
+    
+    var updateContact = PKPaymentRequestShippingContactUpdate()
+    var errors: [Error] = []
+    
+    if contact.name?.familyName == nil {
+      let nameError = PKPaymentRequest.paymentContactInvalidError(withContactField: PKContactField.name, localizedDescription: "Shipping requires last name")
+      updateContact.status = .failure
+      errors.append(nameError)
+    } else if contact.postalAddress?.city == nil {
+      let cityAddressError = PKPaymentRequest.paymentShippingAddressInvalidError(withKey: CNPostalAddressCityKey, localizedDescription:"Shipping requires your city")
+      errors.append(cityAddressError)
+      updateContact.status = .failure
+    } else {
+      updateContact.status = .success
+    }
+    
+    if errors.isEmpty {
+      updateContact = PKPaymentRequestShippingContactUpdate(paymentSummaryItems: [])
+    } else {
+      updateContact = PKPaymentRequestShippingContactUpdate(errors: errors, paymentSummaryItems: [], shippingMethods: [])
+    }
+    
+    completion(updateContact)
+  }
+  
   func paymentAuthorizationController(_ controller: PKPaymentAuthorizationController, didAuthorizePayment payment: PKPayment, handler completion: @escaping (PKPaymentAuthorizationResult) -> Void) {
     
-    if payment.billingContact?.name?.familyName == nil {
-      let error = PKPaymentRequest.paymentContactInvalidError(withContactField: PKContactField.name, localizedDescription: "Billing requires last name")
-      paymentResult.status = .failure
-      paymentResult.errors = [error]
-    } else if payment.shippingContact?.postalAddress?.city == nil {
-      let cityAddressError = PKPaymentRequest.paymentShippingAddressInvalidError(withKey: CNPostalAddressCityKey, localizedDescription:"Shipping requires your city")
-      paymentResult.errors = [cityAddressError]
-      paymentResult.status = .failure
-    } else {
-      registrationContact.firstName = payment.shippingContact?.name?.givenName
-      registrationContact.lastName = payment.shippingContact?.name?.familyName
-      registrationContact.email = payment.shippingContact?.emailAddress
-      
-      paymentResult.status = .success
-    }
+    registrationContact.firstName = payment.shippingContact?.name?.givenName
+    registrationContact.lastName = payment.shippingContact?.name?.familyName
+    registrationContact.email = payment.shippingContact?.emailAddress
+    
+    paymentResult.status = .success
     
     completion(paymentResult)
   }
