@@ -31,10 +31,10 @@ import UIKit
 struct Furniture {
   var coverImageName: String?
   var name = "Item"
-  var price: NSDecimalNumber = 0
+  var price = NSDecimalNumber.zero
   var description: String?
-  var shippingPrice: NSDecimalNumber = 0
-  var discountValue: NSDecimalNumber = 0
+  var shippingPrice = NSDecimalNumber.zero
+  var discountValue = NSDecimalNumber.zero
 }
 
 final class FurnitureDataSource {

@@ -37,9 +37,10 @@ class PaymentManager: NSObject {
   var completionHandler: PaymentManagerCompletionHandler?
   var paymentResult = PKPaymentAuthorizationResult(status: .failure, errors: nil)
   var registrationContact = Contact()
+  var shippingMethods: [PKShippingMethod] = []
+  var paymentItems: [PKPaymentSummaryItem] = []
   
   private var paymentController: PKPaymentAuthorizationController?
-  private var shouldDismissAuthorizationController = true
   
   func pay(forFurnitureItem item: Furniture?, completion: @escaping PaymentManagerCompletionHandler) {
     completionHandler = completion
@@ -51,36 +52,40 @@ class PaymentManager: NSObject {
       request.countryCode = "US"
       request.currencyCode = "USD"
       request.supportedNetworks = SupportedNetworks
-      request.requiredBillingContactFields = [.phoneNumber, .name]
-      request.requiredShippingContactFields = [.postalAddress, .phoneNumber, .name, .emailAddress]
-      
-      var payments: [PKPaymentSummaryItem] = []
+      request.requiredBillingContactFields = [ .name]
+      request.requiredShippingContactFields = [.postalAddress, .phoneNumber, .emailAddress]
       
       let itemPayment = PKPaymentSummaryItem(label: item.name,
                                              amount: item.price,
                                              type: .final)
-      payments.append(itemPayment)
+      paymentItems.append(itemPayment)
       
       if item.shippingPrice.doubleValue > 0 {
-        let shippingPayment = PKPaymentSummaryItem(label: "Shipping",
-                                                   amount: item.shippingPrice,
-                                                   type: .final)
-        payments.append(shippingPayment)
+        let paidShippingMethod = PKShippingMethod(label: "Paid Shipping", amount: item.shippingPrice)
+        paidShippingMethod.identifier = "Paid Shipping"
+        paidShippingMethod.detail = "Paid Shipping in 1 day"
+        shippingMethods.append(paidShippingMethod)
+      } else {
+        let freeShippingMethod = PKShippingMethod(label: "Free Shipping", amount: NSDecimalNumber.zero)
+        freeShippingMethod.identifier = "Free Shipping"
+        freeShippingMethod.detail = "Free Shipping in 7 days"
+        shippingMethods.append(freeShippingMethod)
       }
       
       if item.discountValue.doubleValue > 0 {
         let discountPayment = PKPaymentSummaryItem(label: "Discount",
                                                    amount: item.discountValue.negative(),
                                                    type: .final)
-        payments.append(discountPayment)
+        paymentItems.append(discountPayment)
       }
       
       let totalPrice = item.price.adding(item.shippingPrice).subtracting(item.discountValue)
       let totalPayment = PKPaymentSummaryItem(label: "Shinyture",
                                               amount: totalPrice,
                                               type: .final)
-      payments.append(totalPayment)
-      request.paymentSummaryItems = payments
+      paymentItems.append(totalPayment)
+      request.paymentSummaryItems = paymentItems
+      request.shippingMethods = shippingMethods
       
       paymentController = PKPaymentAuthorizationController(paymentRequest: request)
       paymentController?.delegate = self
@@ -92,57 +97,64 @@ class PaymentManager: NSObject {
 // MARK: PKPaymentAuthorizationControllerDelegate
 extension PaymentManager: PKPaymentAuthorizationControllerDelegate {
   
-  func paymentAuthorizationControllerDidFinish(_ controller: PKPaymentAuthorizationController) {
-    
-    if shouldDismissAuthorizationController {
-      controller.dismiss {
-        DispatchQueue.main.async {
-          self.shouldDismissAuthorizationController = false
-          
-          if self.paymentResult.status == .success {
-            self.completionHandler?(true, self.registrationContact)
-          } else {
-            self.completionHandler?(false, self.registrationContact)
-          }
-        }
-      }
-    }
-  }
-  
   func paymentAuthorizationController(_ controller: PKPaymentAuthorizationController, didSelectShippingContact contact: PKContact, handler completion: @escaping (PKPaymentRequestShippingContactUpdate) -> Void) {
     
     var updateContact = PKPaymentRequestShippingContactUpdate()
     var errors: [Error] = []
     
-    if contact.name?.familyName == nil {
-      let nameError = PKPaymentRequest.paymentContactInvalidError(withContactField: PKContactField.name, localizedDescription: "Shipping requires last name")
-      updateContact.status = .failure
-      errors.append(nameError)
-    } else if contact.postalAddress?.city == nil {
+    if contact.emailAddress == "" {
+      let emailError = PKPaymentRequest.paymentContactInvalidError(withContactField: .emailAddress, localizedDescription: "Shipping requires your email")
+      errors.append(emailError)
+    } else if contact.postalAddress?.city == "" {
       let cityAddressError = PKPaymentRequest.paymentShippingAddressInvalidError(withKey: CNPostalAddressCityKey, localizedDescription:"Shipping requires your city")
       errors.append(cityAddressError)
-      updateContact.status = .failure
-    } else {
-      updateContact.status = .success
     }
     
     if errors.isEmpty {
-      updateContact = PKPaymentRequestShippingContactUpdate(paymentSummaryItems: [])
+      updateContact = PKPaymentRequestShippingContactUpdate(paymentSummaryItems: paymentItems)
     } else {
-      updateContact = PKPaymentRequestShippingContactUpdate(errors: errors, paymentSummaryItems: [], shippingMethods: [])
+      updateContact = PKPaymentRequestShippingContactUpdate(errors: errors, paymentSummaryItems: paymentItems, shippingMethods: shippingMethods)
     }
     
     completion(updateContact)
   }
   
+  func paymentAuthorizationControllerDidFinish(_ controller: PKPaymentAuthorizationController) {
+    
+    controller.dismiss {
+      DispatchQueue.main.async {
+        
+        if self.paymentResult.status == .success {
+          self.completionHandler?(true, self.registrationContact)
+        } else {
+          self.completionHandler?(false, self.registrationContact)
+        }
+      }
+    }
+    
+  }
+  
   func paymentAuthorizationController(_ controller: PKPaymentAuthorizationController, didAuthorizePayment payment: PKPayment, handler completion: @escaping (PKPaymentAuthorizationResult) -> Void) {
+    var errors: [Error] = []
     
-    registrationContact.firstName = payment.shippingContact?.name?.givenName
-    registrationContact.lastName = payment.shippingContact?.name?.familyName
-    registrationContact.email = payment.shippingContact?.emailAddress
+    if let emailAddress = payment.shippingContact?.emailAddress {
+      
+      if emailAddress.isValidEmail() == false {
+        let invalidEmailError = PKPaymentRequest.paymentContactInvalidError(withContactField: .emailAddress, localizedDescription: "Email has incorect format")
+        errors.append(invalidEmailError)
+      }
+    }
     
-    paymentResult.status = .success
-    
+    if errors.isEmpty {
+      registrationContact.firstName = payment.shippingContact?.name?.givenName
+      registrationContact.lastName = payment.shippingContact?.name?.familyName
+      registrationContact.email = payment.shippingContact?.emailAddress
+      paymentResult.status = .success
+    } else {
+      paymentResult.errors = errors
+      paymentResult.status = .failure
+    }
+ 
     completion(paymentResult)
   }
 }

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		AB39DA541FD3EE08004F8D95 /* FurnitureDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB39DA531FD3EE08004F8D95 /* FurnitureDataSource.swift */; };
+		AB5EC33A1FD5DF1700017DBC /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5EC3391FD5DF1700017DBC /* StringExtension.swift */; };
+		AB5EC33B1FD5DF2100017DBC /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5EC3391FD5DF1700017DBC /* StringExtension.swift */; };
 		AB65FC051FD49D2100F4AB42 /* PaymentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB65FC041FD49D2100F4AB42 /* PaymentManager.swift */; };
 		AB65FC091FD4B20200F4AB42 /* FurnitureTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB65FC081FD4B20200F4AB42 /* FurnitureTableViewCell.swift */; };
 		AB65FC101FD4DBC300F4AB42 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AB65FC0E1FD4DBC300F4AB42 /* Interface.storyboard */; };
@@ -118,6 +120,7 @@
 /* Begin PBXFileReference section */
 		AB39DA531FD3EE08004F8D95 /* FurnitureDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FurnitureDataSource.swift; sourceTree = "<group>"; };
 		AB39DA551FD439C2004F8D95 /* Shinyture.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Shinyture.entitlements; sourceTree = "<group>"; };
+		AB5EC3391FD5DF1700017DBC /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		AB65FC041FD49D2100F4AB42 /* PaymentManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentManager.swift; sourceTree = "<group>"; };
 		AB65FC081FD4B20200F4AB42 /* FurnitureTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FurnitureTableViewCell.swift; sourceTree = "<group>"; };
 		AB65FC0C1FD4DBC300F4AB42 /* ShinytureWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShinytureWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -282,6 +285,7 @@
 			children = (
 				AB65FC331FD5377900F4AB42 /* NSDecimalNumberExtension.swift */,
 				AB65FC3F1FD570F700F4AB42 /* UIViewExtension.swift */,
+				AB5EC3391FD5DF1700017DBC /* StringExtension.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -597,6 +601,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AB65FC441FD57CA200F4AB42 /* Contact.swift in Sources */,
+				AB5EC33B1FD5DF2100017DBC /* StringExtension.swift in Sources */,
 				AB65FC3E1FD556E800F4AB42 /* FurnitureInterfaceController.swift in Sources */,
 				AB65FC351FD5522A00F4AB42 /* PaymentManager.swift in Sources */,
 				AB65FC1E1FD4DBC300F4AB42 /* FurnitureDetailsInterfaceController.swift in Sources */,
@@ -641,6 +646,7 @@
 				ABF4F2321FD2F4FB00AFD6C0 /* ConstraintMakerEditable.swift in Sources */,
 				ABF4F22F1FD2F4FB00AFD6C0 /* ConstraintLayoutSupport.swift in Sources */,
 				ABF4F2361FD2F4FB00AFD6C0 /* ConstraintMakerRelatable.swift in Sources */,
+				AB5EC33A1FD5DF1700017DBC /* StringExtension.swift in Sources */,
 				ABF4F2421FD2F4FB00AFD6C0 /* LayoutConstraint.swift in Sources */,
 				D2A5F2211F4A96D0005CD714 /* AppDelegate.swift in Sources */,
 				ABF4F23D1FD2F4FB00AFD6C0 /* ConstraintView+Extensions.swift in Sources */,
