@@ -39,7 +39,6 @@
             <objects>
                 <controller id="B5C-oQ-4Ge" customClass="FurnitureDetailsInterfaceController" customModule="ShinytureWatch_Extension">
                     <items>
-                        <table alignment="left" id="zhN-L5-EUy"/>
                         <group width="1" height="468" alignment="left" layout="vertical" id="xKq-wE-HKf">
                             <items>
                                 <imageView height="87" alignment="left" image="dorelChair" contentMode="scaleAspectFit" id="W70-Vs-mau">
