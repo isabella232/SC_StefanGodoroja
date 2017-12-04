@@ -28,7 +28,7 @@
 
 import PassKit
 
-typealias PaymentManagerCompletionHandler = (Bool) -> Void
+typealias PaymentManagerCompletionHandler = (Bool, Contact?) -> Void
 
 class PaymentManager: NSObject {
   let MerchantID = "merchant.rw.shinyture.raywenderlich"
@@ -36,6 +36,7 @@ class PaymentManager: NSObject {
   
   var completionHandler: PaymentManagerCompletionHandler?
   
+  private var registrationContact = Contact()
   private var paymentController: PKPaymentAuthorizationController?
   private var shouldDismissAuthorizationController = true
   
@@ -49,8 +50,8 @@ class PaymentManager: NSObject {
       request.countryCode = "US"
       request.currencyCode = "USD"
       request.supportedNetworks = SupportedNetworks
-      //request.requiredBillingContactFields = [.phoneNumber, .name]
-      //request.requiredShippingContactFields = [.postalAddress, .phoneNumber, .name]
+      request.requiredBillingContactFields = [.phoneNumber, .name]
+      request.requiredShippingContactFields = [.postalAddress, .phoneNumber, .name, .emailAddress]
       
       var payments: [PKPaymentSummaryItem] = []
       
@@ -67,7 +68,7 @@ class PaymentManager: NSObject {
       }
       
       if item.discountValue.doubleValue > 0 {
-        let discountPayment = PKPaymentSummaryItem(label: "Discout",
+        let discountPayment = PKPaymentSummaryItem(label: "Discount",
                                                    amount: item.discountValue.negative(),
                                                    type: .final)
         payments.append(discountPayment)
@@ -92,6 +93,10 @@ extension PaymentManager: PKPaymentAuthorizationControllerDelegate {
   
   func paymentAuthorizationController(_ controller: PKPaymentAuthorizationController, didAuthorizePayment payment: PKPayment, completion: @escaping (PKPaymentAuthorizationStatus) -> Void) {
     
+    registrationContact.firstName = payment.shippingContact?.name?.givenName
+    registrationContact.lastName = payment.shippingContact?.name?.familyName
+    registrationContact.email = payment.shippingContact?.emailAddress
+
     print(payment.token)
     print("didAuthorizePayment")
     completion(.success)
@@ -103,7 +108,7 @@ extension PaymentManager: PKPaymentAuthorizationControllerDelegate {
       controller.dismiss {
         DispatchQueue.main.async {
           self.shouldDismissAuthorizationController = false
-          self.completionHandler?(true)
+          self.completionHandler?(true, self.registrationContact)
         }
       }
     }

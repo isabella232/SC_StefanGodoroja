@@ -28,22 +28,6 @@
 
 import UIKit
 
-class FurnitureImageView: UIImageView {
-  
-  override var bounds: CGRect {
-    didSet {
-      layer.cornerRadius = 8
-      layer.shadowOffset = CGSize.zero
-      layer.shadowOpacity = 0.3
-      layer.shadowPath = UIBezierPath(roundedRect: bounds,
-                                      byRoundingCorners: .allCorners,
-                                      cornerRadii: CGSize(width: 8, height: 8)).cgPath
-      layer.shouldRasterize = true
-      layer.rasterizationScale = UIScreen.main.scale
-    }
-  }
-}
-
 class FurnitureListViewController: UIViewController {
   
   private var dataSource = FurnitureDataSource()

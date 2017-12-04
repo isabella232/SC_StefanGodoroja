@@ -21,6 +21,10 @@
 		AB65FC361FD5529400F4AB42 /* FurnitureDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB39DA531FD3EE08004F8D95 /* FurnitureDataSource.swift */; };
 		AB65FC371FD552A400F4AB42 /* NSDecimalNumberExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB65FC331FD5377900F4AB42 /* NSDecimalNumberExtension.swift */; };
 		AB65FC3E1FD556E800F4AB42 /* FurnitureInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB65FC3D1FD556E800F4AB42 /* FurnitureInterfaceController.swift */; };
+		AB65FC401FD570F700F4AB42 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB65FC3F1FD570F700F4AB42 /* UIViewExtension.swift */; };
+		AB65FC431FD57B5100F4AB42 /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB65FC421FD57B5100F4AB42 /* Contact.swift */; };
+		AB65FC441FD57CA200F4AB42 /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB65FC421FD57B5100F4AB42 /* Contact.swift */; };
+		AB65FC461FD57EC900F4AB42 /* FurnitureImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB65FC451FD57EC900F4AB42 /* FurnitureImageView.swift */; };
 		ABDE323E1FD0A36E00EB0E14 /* FurnitureListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABDE323D1FD0A36E00EB0E14 /* FurnitureListViewController.swift */; };
 		ABDE32401FD0A39200EB0E14 /* FurnitureDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABDE323F1FD0A39200EB0E14 /* FurnitureDetailsViewController.swift */; };
 		ABDE32421FD0A3BB00EB0E14 /* CreateAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABDE32411FD0A3BB00EB0E14 /* CreateAccountViewController.swift */; };
@@ -127,6 +131,9 @@
 		AB65FC311FD4DE4D00F4AB42 /* ShinytureWatch Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "ShinytureWatch Extension.entitlements"; sourceTree = "<group>"; };
 		AB65FC331FD5377900F4AB42 /* NSDecimalNumberExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSDecimalNumberExtension.swift; sourceTree = "<group>"; };
 		AB65FC3D1FD556E800F4AB42 /* FurnitureInterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FurnitureInterfaceController.swift; sourceTree = "<group>"; };
+		AB65FC3F1FD570F700F4AB42 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
+		AB65FC421FD57B5100F4AB42 /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
+		AB65FC451FD57EC900F4AB42 /* FurnitureImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FurnitureImageView.swift; sourceTree = "<group>"; };
 		ABDE323D1FD0A36E00EB0E14 /* FurnitureListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FurnitureListViewController.swift; sourceTree = "<group>"; };
 		ABDE323F1FD0A39200EB0E14 /* FurnitureDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FurnitureDetailsViewController.swift; sourceTree = "<group>"; };
 		ABDE32411FD0A3BB00EB0E14 /* CreateAccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountViewController.swift; sourceTree = "<group>"; };
@@ -243,18 +250,11 @@
 		AB65FC061FD4B1B800F4AB42 /* FurnitureList */ = {
 			isa = PBXGroup;
 			children = (
+				AB65FC451FD57EC900F4AB42 /* FurnitureImageView.swift */,
+				AB65FC081FD4B20200F4AB42 /* FurnitureTableViewCell.swift */,
 				ABDE323D1FD0A36E00EB0E14 /* FurnitureListViewController.swift */,
-				AB65FC071FD4B1CA00F4AB42 /* TableViewCell */,
 			);
 			path = FurnitureList;
-			sourceTree = "<group>";
-		};
-		AB65FC071FD4B1CA00F4AB42 /* TableViewCell */ = {
-			isa = PBXGroup;
-			children = (
-				AB65FC081FD4B20200F4AB42 /* FurnitureTableViewCell.swift */,
-			);
-			path = TableViewCell;
 			sourceTree = "<group>";
 		};
 		AB65FC0D1FD4DBC300F4AB42 /* ShinytureWatch */ = {
@@ -281,6 +281,7 @@
 			isa = PBXGroup;
 			children = (
 				AB65FC331FD5377900F4AB42 /* NSDecimalNumberExtension.swift */,
+				AB65FC3F1FD570F700F4AB42 /* UIViewExtension.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -311,12 +312,21 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		AB65FC411FD57B2A00F4AB42 /* CreateAccount */ = {
+			isa = PBXGroup;
+			children = (
+				AB65FC421FD57B5100F4AB42 /* Contact.swift */,
+				ABDE32411FD0A3BB00EB0E14 /* CreateAccountViewController.swift */,
+			);
+			path = CreateAccount;
+			sourceTree = "<group>";
+		};
 		ABDE323C1FD0A30A00EB0E14 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
 				AB65FC061FD4B1B800F4AB42 /* FurnitureList */,
+				AB65FC411FD57B2A00F4AB42 /* CreateAccount */,
 				ABDE323F1FD0A39200EB0E14 /* FurnitureDetailsViewController.swift */,
-				ABDE32411FD0A3BB00EB0E14 /* CreateAccountViewController.swift */,
 				ABDE32431FD0A3CA00EB0E14 /* PaymentConfirmationViewController.swift */,
 				AB39DA521FD3EDE2004F8D95 /* DataSource */,
 			);
@@ -570,6 +580,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AB65FC441FD57CA200F4AB42 /* Contact.swift in Sources */,
 				AB65FC3E1FD556E800F4AB42 /* FurnitureInterfaceController.swift in Sources */,
 				AB65FC351FD5522A00F4AB42 /* PaymentManager.swift in Sources */,
 				AB65FC1E1FD4DBC300F4AB42 /* FurnitureDetailsInterfaceController.swift in Sources */,
@@ -588,6 +599,7 @@
 				ABF4F2311FD2F4FB00AFD6C0 /* ConstraintMaker.swift in Sources */,
 				ABDE32421FD0A3BB00EB0E14 /* CreateAccountViewController.swift in Sources */,
 				ABF4F22D1FD2F4FB00AFD6C0 /* ConstraintLayoutGuide.swift in Sources */,
+				AB65FC401FD570F700F4AB42 /* UIViewExtension.swift in Sources */,
 				ABF4F22B1FD2F4FB00AFD6C0 /* ConstraintItem.swift in Sources */,
 				ABF4F2431FD2F4FB00AFD6C0 /* LayoutConstraintItem.swift in Sources */,
 				ABF4F2391FD2F4FB00AFD6C0 /* ConstraintPriority.swift in Sources */,
@@ -616,7 +628,9 @@
 				ABF4F2421FD2F4FB00AFD6C0 /* LayoutConstraint.swift in Sources */,
 				D2A5F2211F4A96D0005CD714 /* AppDelegate.swift in Sources */,
 				ABF4F23D1FD2F4FB00AFD6C0 /* ConstraintView+Extensions.swift in Sources */,
+				AB65FC461FD57EC900F4AB42 /* FurnitureImageView.swift in Sources */,
 				ABDE323E1FD0A36E00EB0E14 /* FurnitureListViewController.swift in Sources */,
+				AB65FC431FD57B5100F4AB42 /* Contact.swift in Sources */,
 				ABF4F23E1FD2F4FB00AFD6C0 /* ConstraintView.swift in Sources */,
 				ABF4F2251FD2F4FB00AFD6C0 /* ConstraintConfig.swift in Sources */,
 				AB39DA541FD3EE08004F8D95 /* FurnitureDataSource.swift in Sources */,

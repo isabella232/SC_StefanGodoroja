@@ -42,7 +42,7 @@ class FurnitureDetailsInterfaceController: WKInterfaceController {
   }
   
   @IBAction func payButtonPressed(sender: AnyObject) {
-    paymentManager.pay(forFurnitureItem: furnitureItem) { (success) in
+    paymentManager.pay(forFurnitureItem: furnitureItem) { (success, contact)  in
       
       if success {
         self.pushController(withName: "PaymentConfirmation", context: nil)

@@ -28,20 +28,41 @@
 
 import UIKit
 
-class PaymentConfirmationViewController: UIViewController {
+class CreateAccountViewController: UIViewController {
   var registrationContact: Contact?
-
+    
+    @IBOutlet private var profilePhotoImageView: UIImageView!
+    @IBOutlet private var firstNameTextField: UITextField!
+    @IBOutlet private var lastNameTextField: UITextField!
+    @IBOutlet private var emailTextField: UITextField!
+    
   override func viewDidLoad() {
     super.viewDidLoad()
-    title = "Confirmed"
+    title = "Create Account"
+    profilePhotoImageView.round()
+    populateContactTextFields()
   }
   
-  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    let createAccountVC = segue.destination as? CreateAccountViewController
+  @IBAction func registerButtonPressed(_ sender: Any) {
+    // This will switch back to the rootviewcontroller.
+    // The purpose of this viewcontroller is to demonstrate
+    // that after making a purchase, developers can use contact
+    // information to make easier the process of registration.
+    let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+    let rootViewController = mainStoryboard.instantiateViewController(withIdentifier: "rw.root.navcontroller")
     
-    if let createAccountVC = createAccountVC {
-      createAccountVC.registrationContact = registrationContact
+    if let window = UIApplication.shared.keyWindow {
+      UIView.transition(with: window,
+                        duration: 0.3,
+                        options: .transitionCrossDissolve , animations: {
+                          window.rootViewController = rootViewController;
+      })
     }
   }
   
+  private func populateContactTextFields() {
+    firstNameTextField.text = registrationContact?.firstName
+    lastNameTextField.text = registrationContact?.lastName
+    emailTextField.text = registrationContact?.email
+  }
 }

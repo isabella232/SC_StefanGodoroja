@@ -33,6 +33,7 @@ class FurnitureDetailsViewController: UIViewController {
   var furnitureItem: Furniture?
   
   private lazy var paymentManager = PaymentManager()
+  private var registrationContact: Contact?
   
   @IBOutlet var furnitureImageView: FurnitureImageView!
   @IBOutlet private var furnitureShippingLabel: UILabel!
@@ -45,8 +46,18 @@ class FurnitureDetailsViewController: UIViewController {
     addPaymentButtons()
   }
   
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    let paymentConfirmationVC = segue.destination as? PaymentConfirmationViewController
+    
+    if let paymentConfirmationVC = paymentConfirmationVC {
+      paymentConfirmationVC.registrationContact = registrationContact
+    }
+    
+  }
+  
   @objc func payPressed() {
-    paymentManager.pay(forFurnitureItem: furnitureItem) { (success) in
+    paymentManager.pay(forFurnitureItem: furnitureItem) { (success, contact)  in
+      self.registrationContact = contact
       
       if success {
         self.performSegue(withIdentifier: "show.paymentconfirmation.view", sender: nil)
