@@ -26,14 +26,22 @@
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 /// THE SOFTWARE.
 
-import PassKit
+import UIKit
 
-struct ApplePayKey {
-  static let merchantID = "merchant.rw.shinyture.raywenderlich"
-}
-
-class PaymentManager {
+class FurnitureTableViewCell: UITableViewCell {
+  @IBOutlet private var furnitureImageView: UIImageView!
+  @IBOutlet private var furnitureNameLabel: UILabel!
+  @IBOutlet private var furniturePriceLabel: UILabel!
   
-  let SupportedNetworks: [PKPaymentNetwork] = [.visa, .masterCard, .amex]
+  func showFurnitureImage(named name: String) {
+    furnitureImageView.image = UIImage(named: name)
+  }
   
+  func showFurnitureName(name: String) {
+    furnitureNameLabel.text = name
+  }
+  
+  func showFurniture(price: Double) {
+    furniturePriceLabel.text = String("$") + String(price)
+  }
 }

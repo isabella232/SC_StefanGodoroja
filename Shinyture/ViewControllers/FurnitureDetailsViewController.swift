@@ -29,36 +29,21 @@
 import UIKit
 import PassKit
 
-struct ApplePayKey {
-  static let merchantID = "merchant.rw.shinyture.raywenderlich"
-}
-
 class FurnitureDetailsViewController: UIViewController {
+  var furnitureItem: Furniture?
   
-  let SupportedPaymentNetworks = [PKPaymentNetwork.visa, PKPaymentNetwork.masterCard, PKPaymentNetwork.amex]
+  private lazy var paymentManager = PaymentManager()
+  private var paymentController: PKPaymentAuthorizationController?
   
-  var paymentController: PKPaymentAuthorizationController?
-
-    @IBOutlet var applePayButtonContainer: UIView!
+  @IBOutlet var furnitureImageView: FurnitureImageView!
+  @IBOutlet private var furnitureShippingLabel: UILabel!
+  @IBOutlet private var furniturePriceLabel: UILabel!
+  @IBOutlet private var furnitureDescriptionLabel: UILabel!
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    
-    var button: UIButton?
-    
-    if PKPaymentAuthorizationController.canMakePayments() {
-      button = PKPaymentButton(paymentButtonType: .buy, paymentButtonStyle: .black)
-      button?.addTarget(self, action: #selector(FurnitureDetailsViewController.payPressed), for: .touchUpInside)
-    } else if PKPaymentAuthorizationController.canMakePayments(usingNetworks: SupportedPaymentNetworks) {
-      button = PKPaymentButton(paymentButtonType: .setUp, paymentButtonStyle: .black)
-      button?.addTarget(self, action: #selector(FurnitureDetailsViewController.setupPressed), for: .touchUpInside)
-    }
-    
-    if button != nil {
-      button!.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin]
-      applePayButtonContainer.addSubview(button!)
-    }
-    
+    showFurnitureDetails()
+    addPaymentButtons()
   }
   
   @objc func payPressed() {
@@ -67,7 +52,7 @@ class FurnitureDetailsViewController: UIViewController {
     request.merchantCapabilities = .capability3DS
     request.countryCode = "US"
     request.currencyCode = "USD"
-    request.supportedNetworks = SupportedPaymentNetworks
+    request.supportedNetworks = paymentManager.SupportedNetworks
     
     let paymentItem = PKPaymentSummaryItem(label: "Chair", amount: NSDecimalNumber(value: 12.0), type: .final)
     request.paymentSummaryItems = [paymentItem]
@@ -77,17 +62,65 @@ class FurnitureDetailsViewController: UIViewController {
     paymentController?.present(completion: { (present) in
       
     })
-
+    
   }
   
   @objc func setupPressed() {
     
   }
+  
+  private func showFurnitureDetails() {
+    if let furniture = furnitureItem {
+      
+      if let furnitureImage = furniture.coverImageName {
+        furnitureImageView.image = UIImage(named: furnitureImage)
+      }
+      
+      furnitureDescriptionLabel.text = furniture.description
+      furniturePriceLabel.text = String("$") + String(describing: furniture.price)
+      
+      if furniture.shippingPrice.doubleValue > 0.0 {
+        furnitureShippingLabel.text = "Shipping: $" + String(describing: furniture.shippingPrice)
+      } else {
+        furnitureShippingLabel.text = "Free Shipping"
+      }
+      
+    }
+  }
+  
+  private func addPaymentButtons() {
+    // Traditional Payment Button
+    let defaultPaymentButton = UIButton(type: .custom)
+    defaultPaymentButton.setImage(UIImage(named: "cart"), for: .normal)
+    defaultPaymentButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 15)
+    defaultPaymentButton.titleLabel?.text = "Buy"
+    defaultPaymentButton.setTitleColor(.white, for: .normal)
+    
+    // Apple Pay Button
+    var applePayButton: UIButton?
+    if PKPaymentAuthorizationController.canMakePayments() {
+      applePayButton = PKPaymentButton(paymentButtonType: .buy, paymentButtonStyle: .black)
+      applePayButton?.addTarget(self, action: #selector(payPressed), for: .touchUpInside)
+    } else if PKPaymentAuthorizationController.canMakePayments(usingNetworks: paymentManager.SupportedNetworks) {
+      applePayButton = PKPaymentButton(paymentButtonType: .setUp, paymentButtonStyle: .black)
+      applePayButton?.addTarget(self, action: #selector(setupPressed), for: .touchUpInside)
+    }
+    
+    view.addSubview(applePayButton!)
+    
+    applePayButton?.snp.makeConstraints({ (maker) in
+      maker.size.equalTo((applePayButton?.frame.size)!)
+      maker.right.equalTo(view.snp.rightMargin)
+      maker.bottom.equalTo(view.snp.bottomMargin)
+    })
+    
+  }
+  
 }
 
+// MARK: PKPaymentAuthorizationControllerDelegate
 extension FurnitureDetailsViewController: PKPaymentAuthorizationControllerDelegate {
   
-
   func paymentAuthorizationController(_ controller: PKPaymentAuthorizationController, didAuthorizePayment payment: PKPayment, completion: @escaping (PKPaymentAuthorizationStatus) -> Void) {
     
     print(payment.token)
@@ -97,9 +130,9 @@ extension FurnitureDetailsViewController: PKPaymentAuthorizationControllerDelega
   
   func paymentAuthorizationControllerDidFinish(_ controller: PKPaymentAuthorizationController) {
     controller.dismiss {
-      print("paymentAuthorizationControllerDidFinish")
-      controller.dismiss(completion: nil)
-
+      DispatchQueue.main.async {
+        self.performSegue(withIdentifier: "show.paymentconfirmation.view", sender: nil)
+      }
     }
   }
   

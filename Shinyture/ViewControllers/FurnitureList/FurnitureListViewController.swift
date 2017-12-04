@@ -28,39 +28,39 @@
 
 import UIKit
 
-extension UIView {
-  
-  func setupShadow() {
-    self.layer.cornerRadius = 8
-    self.layer.shadowOffset = CGSize.zero
-    self.layer.shadowOpacity = 0.3
-    self.layer.shadowPath = UIBezierPath(roundedRect: self.bounds,
-                                         byRoundingCorners: .allCorners,
-                                         cornerRadii: CGSize(width: 8, height: 8)).cgPath
-    self.layer.shouldRasterize = true
-    self.layer.rasterizationScale = UIScreen.main.scale
-  }
-  
-}
-
-class FurnitureOverviewView: UIView {
-
-}
-
 class FurnitureImageView: UIImageView {
   
   override var bounds: CGRect {
     didSet {
-      setupShadow()
+      layer.cornerRadius = 8
+      layer.shadowOffset = CGSize.zero
+      layer.shadowOpacity = 0.3
+      layer.shadowPath = UIBezierPath(roundedRect: bounds,
+                                      byRoundingCorners: .allCorners,
+                                      cornerRadii: CGSize(width: 8, height: 8)).cgPath
+      layer.shouldRasterize = true
+      layer.rasterizationScale = UIScreen.main.scale
     }
   }
 }
 
 class FurnitureListViewController: UIViewController {
   
+  private var dataSource = FurnitureDataSource()
+  private var selectedCellIndex = 0
+  
   override func viewDidLoad() {
     super.viewDidLoad()
-    self.title = "Shinyture"
+    title = "Shinyture"
+    addMenuSegmentControl()
+  }
+  
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    let furnitureDetailsVC = segue.destination as? FurnitureDetailsViewController
+    furnitureDetailsVC?.furnitureItem = dataSource.items[selectedCellIndex]
+  }
+  
+  private func addMenuSegmentControl() {
     let titles = ["Today", "Best Deals", "Categories"]
     let segmentedControl = TwicketSegmentedControl(frame: CGRect.zero)
     segmentedControl.setSegmentItems(titles)
@@ -75,19 +75,37 @@ class FurnitureListViewController: UIViewController {
   }
 }
 
-extension FurnitureListViewController: UITableViewDelegate, UITableViewDataSource {
+// MARK: UITableViewDelegate
+extension FurnitureListViewController: UITableViewDelegate {
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    selectedCellIndex = indexPath.row
     performSegue(withIdentifier: "show.furnituredetails.segue", sender: nil)
   }
+}
+
+// MARK: UITableViewDataSource
+extension FurnitureListViewController: UITableViewDataSource {
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return 6;
+    return dataSource.items.count;
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = tableView.dequeueReusableCell(withIdentifier: "rw.furnitureoverview.cell")
-    return cell!
+    let cell = tableView.dequeueReusableCell(withIdentifier: "rw.furnitureoverview.cell") as! FurnitureTableViewCell
+    let furnitureItem = dataSource.items[indexPath.row]
+    
+    if let imageName = furnitureItem.coverImageName {
+      cell.showFurnitureImage(named: imageName)
+    }
+    
+    if let name = furnitureItem.name {
+      cell.showFurnitureName(name: name)
+    }
+    
+    cell.showFurniture(price: furnitureItem.price.doubleValue)
+    
+    return cell
   }
   
   func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
