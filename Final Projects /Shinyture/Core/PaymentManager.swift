@@ -28,7 +28,7 @@
 
 import PassKit
 
-typealias PaymentManagerCompletionHandler = (Bool, Contact?) -> Void
+typealias PaymentManagerCompletionHandler = (Bool) -> Void
 
 class PaymentManager: NSObject {
   let MerchantID = "merchant.rw.shinyture.raywenderlich"
@@ -37,7 +37,6 @@ class PaymentManager: NSObject {
   var completionHandler: PaymentManagerCompletionHandler?
   
   private var paymentStatus = PKPaymentAuthorizationStatus.failure
-  private var registrationContact = Contact()
   private var shippingMethods: [PKShippingMethod] = []
   private var paymentItems: [PKPaymentSummaryItem] = []
   private var paymentController: PKPaymentAuthorizationController?
@@ -125,9 +124,9 @@ extension PaymentManager: PKPaymentAuthorizationControllerDelegate {
       DispatchQueue.main.async {
         
         if self.paymentStatus == .success {
-          self.completionHandler?(true, self.registrationContact)
+          self.completionHandler?(true)
         } else {
-          self.completionHandler?(false, self.registrationContact)
+          self.completionHandler?(false)
         }
       }
     }
@@ -163,9 +162,6 @@ extension PaymentManager: PKPaymentAuthorizationControllerDelegate {
     }
     
     if errors.isEmpty {
-      registrationContact.firstName = payment.shippingContact?.name?.givenName
-      registrationContact.lastName = payment.shippingContact?.name?.familyName
-      registrationContact.email = payment.shippingContact?.emailAddress
       paymentStatus = .success
     } else {
       paymentStatus = .failure

@@ -13,11 +13,9 @@
 		AB65FC091FD4B20200F4AB42 /* FurnitureTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB65FC081FD4B20200F4AB42 /* FurnitureTableViewCell.swift */; };
 		AB65FC341FD5377900F4AB42 /* NSDecimalNumberExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB65FC331FD5377900F4AB42 /* NSDecimalNumberExtension.swift */; };
 		AB65FC401FD570F700F4AB42 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB65FC3F1FD570F700F4AB42 /* UIViewExtension.swift */; };
-		AB65FC431FD57B5100F4AB42 /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB65FC421FD57B5100F4AB42 /* Contact.swift */; };
 		AB65FC461FD57EC900F4AB42 /* FurnitureImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB65FC451FD57EC900F4AB42 /* FurnitureImageView.swift */; };
 		ABDE323E1FD0A36E00EB0E14 /* FurnitureListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABDE323D1FD0A36E00EB0E14 /* FurnitureListViewController.swift */; };
 		ABDE32401FD0A39200EB0E14 /* FurnitureDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABDE323F1FD0A39200EB0E14 /* FurnitureDetailsViewController.swift */; };
-		ABDE32421FD0A3BB00EB0E14 /* CreateAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABDE32411FD0A3BB00EB0E14 /* CreateAccountViewController.swift */; };
 		ABDE32441FD0A3CA00EB0E14 /* PaymentConfirmationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABDE32431FD0A3CA00EB0E14 /* PaymentConfirmationViewController.swift */; };
 		ABF4F1FA1FD2EBC200AFD6C0 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ABF4F1F51FD2EBC200AFD6C0 /* Info.plist */; };
 		ABF4F1FB1FD2EBC200AFD6C0 /* Palette.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABF4F1F61FD2EBC200AFD6C0 /* Palette.swift */; };
@@ -84,11 +82,9 @@
 		AB65FC081FD4B20200F4AB42 /* FurnitureTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FurnitureTableViewCell.swift; sourceTree = "<group>"; };
 		AB65FC331FD5377900F4AB42 /* NSDecimalNumberExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSDecimalNumberExtension.swift; sourceTree = "<group>"; };
 		AB65FC3F1FD570F700F4AB42 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
-		AB65FC421FD57B5100F4AB42 /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
 		AB65FC451FD57EC900F4AB42 /* FurnitureImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FurnitureImageView.swift; sourceTree = "<group>"; };
 		ABDE323D1FD0A36E00EB0E14 /* FurnitureListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FurnitureListViewController.swift; sourceTree = "<group>"; };
 		ABDE323F1FD0A39200EB0E14 /* FurnitureDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FurnitureDetailsViewController.swift; sourceTree = "<group>"; };
-		ABDE32411FD0A3BB00EB0E14 /* CreateAccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountViewController.swift; sourceTree = "<group>"; };
 		ABDE32431FD0A3CA00EB0E14 /* PaymentConfirmationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentConfirmationViewController.swift; sourceTree = "<group>"; };
 		ABF4F1F51FD2EBC200AFD6C0 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ABF4F1F61FD2EBC200AFD6C0 /* Palette.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Palette.swift; sourceTree = "<group>"; };
@@ -212,15 +208,6 @@
 			path = Utility;
 			sourceTree = "<group>";
 		};
-		AB65FC411FD57B2A00F4AB42 /* CreateAccount */ = {
-			isa = PBXGroup;
-			children = (
-				AB65FC421FD57B5100F4AB42 /* Contact.swift */,
-				ABDE32411FD0A3BB00EB0E14 /* CreateAccountViewController.swift */,
-			);
-			path = CreateAccount;
-			sourceTree = "<group>";
-		};
 		AB65FC471FD58A5E00F4AB42 /* FurnitureDetails */ = {
 			isa = PBXGroup;
 			children = (
@@ -243,7 +230,6 @@
 				AB65FC481FD58A6C00F4AB42 /* PaymentConfirmation */,
 				AB65FC471FD58A5E00F4AB42 /* FurnitureDetails */,
 				AB65FC061FD4B1B800F4AB42 /* FurnitureList */,
-				AB65FC411FD57B2A00F4AB42 /* CreateAccount */,
 				AB39DA521FD3EDE2004F8D95 /* DataSource */,
 			);
 			path = ViewControllers;
@@ -429,7 +415,6 @@
 				ABF4F2231FD2F4FB00AFD6C0 /* Constraint.swift in Sources */,
 				ABF4F23C1FD2F4FB00AFD6C0 /* ConstraintRelation.swift in Sources */,
 				ABF4F2311FD2F4FB00AFD6C0 /* ConstraintMaker.swift in Sources */,
-				ABDE32421FD0A3BB00EB0E14 /* CreateAccountViewController.swift in Sources */,
 				ABF4F22D1FD2F4FB00AFD6C0 /* ConstraintLayoutGuide.swift in Sources */,
 				AB65FC401FD570F700F4AB42 /* UIViewExtension.swift in Sources */,
 				ABF4F22B1FD2F4FB00AFD6C0 /* ConstraintItem.swift in Sources */,
@@ -463,7 +448,6 @@
 				ABF4F23D1FD2F4FB00AFD6C0 /* ConstraintView+Extensions.swift in Sources */,
 				AB65FC461FD57EC900F4AB42 /* FurnitureImageView.swift in Sources */,
 				ABDE323E1FD0A36E00EB0E14 /* FurnitureListViewController.swift in Sources */,
-				AB65FC431FD57B5100F4AB42 /* Contact.swift in Sources */,
 				ABF4F23E1FD2F4FB00AFD6C0 /* ConstraintView.swift in Sources */,
 				ABF4F2251FD2F4FB00AFD6C0 /* ConstraintConfig.swift in Sources */,
 				AB39DA541FD3EE08004F8D95 /* FurnitureDataSource.swift in Sources */,

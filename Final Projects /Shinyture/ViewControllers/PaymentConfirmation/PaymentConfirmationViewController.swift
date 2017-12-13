@@ -29,19 +29,10 @@
 import UIKit
 
 class PaymentConfirmationViewController: UIViewController {
-  var registrationContact: Contact?
 
   override func viewDidLoad() {
     super.viewDidLoad()
     title = "Confirmed"
-  }
-  
-  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    let createAccountVC = segue.destination as? CreateAccountViewController
-    
-    if let createAccountVC = createAccountVC {
-      createAccountVC.registrationContact = registrationContact
-    }
   }
   
 }

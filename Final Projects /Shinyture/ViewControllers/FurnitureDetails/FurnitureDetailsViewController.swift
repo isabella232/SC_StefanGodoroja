@@ -33,7 +33,6 @@ class FurnitureDetailsViewController: UIViewController {
   var furnitureItem: Furniture?
   
   private lazy var paymentManager = PaymentManager()
-  private var registrationContact: Contact?
   
   @IBOutlet private var applePayButtonContainer: UIView!
   @IBOutlet private var furnitureImageView: FurnitureImageView!
@@ -53,18 +52,8 @@ class FurnitureDetailsViewController: UIViewController {
     styleUnitsButton()
   }
   
-  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    let paymentConfirmationVC = segue.destination as? PaymentConfirmationViewController
-    
-    if let paymentConfirmationVC = paymentConfirmationVC {
-      paymentConfirmationVC.registrationContact = registrationContact
-    }
-    
-  }
-  
   @objc func payPressed() {
-    paymentManager.pay(forFurnitureItem: furnitureItem) { (success, contact)  in
-      self.registrationContact = contact
+    paymentManager.pay(forFurnitureItem: furnitureItem) { (success)  in
       
       if success {
         self.performSegue(withIdentifier: "show.paymentconfirmation.view", sender: nil)
@@ -73,11 +62,22 @@ class FurnitureDetailsViewController: UIViewController {
     }
   }
   
+  @IBAction func selectFurnitureUnits(_ sender: Any) {
+    
+  }
+  
   private func showFurnitureDetails() {
     if let furniture = furnitureItem {
       
       if let furnitureImage = furniture.coverImageName {
         furnitureImageView.image = UIImage(named: furnitureImage)
+      }
+      
+      title = furniture.name
+      
+      if furniture.discountValue.doubleValue > 0 {
+        let discount = "Discount: $\(furniture.discountValue.doubleValue)"
+        discountButton.setTitle(discount, for: .normal)
       }
       
       furnitureDescriptionLabel.text = furniture.description
