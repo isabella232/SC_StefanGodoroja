@@ -42,6 +42,7 @@ class FurnitureDetailsViewController: UIViewController {
   @IBOutlet private var furnitureDescriptionLabel: UILabel!
   @IBOutlet private var discountButton: UIButton!
   @IBOutlet private var defaultPaymentButton: UIButton!
+  @IBOutlet private var unitsButton: UIButton!
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -49,6 +50,7 @@ class FurnitureDetailsViewController: UIViewController {
     addApplePayButton()
     styleDiscountButton()
     styleDefaultPaymentButton()
+    styleUnitsButton()
   }
   
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -107,6 +109,14 @@ class FurnitureDetailsViewController: UIViewController {
                                                   blue: (34/255.0),
                                                   alpha: 1.0)
     defaultPaymentButton.round(radius: 4, withBorderColor: defaultPaymentButtonBorderColor)
+  }
+  
+  private func styleUnitsButton() {
+    let discountButtonBorderColor = UIColor(red: (55/255.0),
+                                            green: (51/255.0),
+                                            blue: (52/255.0),
+                                            alpha: 1.0)
+    unitsButton.round(radius: 4, withBorderColor: discountButtonBorderColor)
   }
   
   private func addApplePayButton() {
