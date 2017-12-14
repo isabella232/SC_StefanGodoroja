@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AB2B4D3D1FE1B9CD0007AA01 /* UnitsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB2B4D3C1FE1B9CD0007AA01 /* UnitsViewController.swift */; };
 		AB39DA541FD3EE08004F8D95 /* FurnitureDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB39DA531FD3EE08004F8D95 /* FurnitureDataSource.swift */; };
 		AB5EC33A1FD5DF1700017DBC /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5EC3391FD5DF1700017DBC /* StringExtension.swift */; };
 		AB65FC051FD49D2100F4AB42 /* PaymentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB65FC041FD49D2100F4AB42 /* PaymentManager.swift */; };
@@ -75,6 +76,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		AB2B4D3C1FE1B9CD0007AA01 /* UnitsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitsViewController.swift; sourceTree = "<group>"; };
 		AB39DA531FD3EE08004F8D95 /* FurnitureDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FurnitureDataSource.swift; sourceTree = "<group>"; };
 		AB39DA551FD439C2004F8D95 /* Shinyture.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Shinyture.entitlements; sourceTree = "<group>"; };
 		AB5EC3391FD5DF1700017DBC /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
@@ -146,6 +148,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AB2B4D3B1FE1B9A80007AA01 /* Units */ = {
+			isa = PBXGroup;
+			children = (
+				AB2B4D3C1FE1B9CD0007AA01 /* UnitsViewController.swift */,
+			);
+			path = Units;
+			sourceTree = "<group>";
+		};
 		AB39DA521FD3EDE2004F8D95 /* DataSource */ = {
 			isa = PBXGroup;
 			children = (
@@ -227,9 +237,10 @@
 		ABDE323C1FD0A30A00EB0E14 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				AB65FC481FD58A6C00F4AB42 /* PaymentConfirmation */,
-				AB65FC471FD58A5E00F4AB42 /* FurnitureDetails */,
 				AB65FC061FD4B1B800F4AB42 /* FurnitureList */,
+				AB65FC471FD58A5E00F4AB42 /* FurnitureDetails */,
+				AB2B4D3B1FE1B9A80007AA01 /* Units */,
+				AB65FC481FD58A6C00F4AB42 /* PaymentConfirmation */,
 				AB39DA521FD3EDE2004F8D95 /* DataSource */,
 			);
 			path = ViewControllers;
@@ -450,6 +461,7 @@
 				ABDE323E1FD0A36E00EB0E14 /* FurnitureListViewController.swift in Sources */,
 				ABF4F23E1FD2F4FB00AFD6C0 /* ConstraintView.swift in Sources */,
 				ABF4F2251FD2F4FB00AFD6C0 /* ConstraintConfig.swift in Sources */,
+				AB2B4D3D1FE1B9CD0007AA01 /* UnitsViewController.swift in Sources */,
 				AB39DA541FD3EE08004F8D95 /* FurnitureDataSource.swift in Sources */,
 				ABF4F1FB1FD2EBC200AFD6C0 /* Palette.swift in Sources */,
 				ABDE32401FD0A39200EB0E14 /* FurnitureDetailsViewController.swift in Sources */,

@@ -54,10 +54,13 @@ class PaymentManager: NSObject {
       request.requiredBillingContactFields = [ .name]
       request.requiredShippingContactFields = [.postalAddress, .phoneNumber, .emailAddress]
       
-      let itemPayment = PKPaymentSummaryItem(label: item.name,
-                                             amount: item.price,
-                                             type: .final)
-      paymentItems.append(itemPayment)
+  
+      for _ in 0..<item.units {
+        let itemPayment = PKPaymentSummaryItem(label: item.name,
+                                               amount: item.price,
+                                               type: .final)
+        paymentItems.append(itemPayment)
+      }
       
       if item.shippingPrice.doubleValue > 0 {
         let paidShippingMethod = PKShippingMethod(label: "Paid Shipping", amount: item.shippingPrice)
@@ -78,7 +81,7 @@ class PaymentManager: NSObject {
         paymentItems.append(discountPayment)
       }
       
-      let totalPrice = item.price.adding(item.shippingPrice).subtracting(item.discountValue)
+      let totalPrice = item.price.multiplying(by: NSDecimalNumber(value: item.units)).adding(item.shippingPrice).subtracting(item.discountValue)
       let totalPayment = PKPaymentSummaryItem(label: "Shinyture",
                                               amount: totalPrice,
                                               type: .final)

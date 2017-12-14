@@ -33,8 +33,13 @@ class FurnitureDetailsViewController: UIViewController {
   var furnitureItem: Furniture?
   
   private lazy var paymentManager = PaymentManager()
+  private var currentFurnitureUnits = Unit(value: 1, selected: true) {
+    didSet {
+      furnitureItem?.units = currentFurnitureUnits.value
+    }
+  }
   
-  @IBOutlet private var applePayButtonContainer: UIView!
+  @IBOutlet private var containerView: UIView!
   @IBOutlet private var furnitureImageView: FurnitureImageView!
   @IBOutlet private var furnitureShippingLabel: UILabel!
   @IBOutlet private var furniturePriceLabel: UILabel!
@@ -52,6 +57,20 @@ class FurnitureDetailsViewController: UIViewController {
     styleUnitsButton()
   }
   
+  private func addApplePayButton() {
+    var applePayButton: UIButton?
+    
+    if PKPaymentAuthorizationController.canMakePayments() {
+      applePayButton = PKPaymentButton(paymentButtonType: .buy, paymentButtonStyle: .black)
+      applePayButton?.addTarget(self, action: #selector(payPressed), for: .touchUpInside)
+    } else if PKPaymentAuthorizationController.canMakePayments(usingNetworks: paymentManager.SupportedNetworks) {
+      applePayButton = PKPaymentButton(paymentButtonType: .setUp, paymentButtonStyle: .black)
+      applePayButton?.addTarget(self, action: #selector(payPressed), for: .touchUpInside)
+    }
+    
+    addApplePay(button: applePayButton)
+  }
+  
   @objc func payPressed() {
     paymentManager.pay(forFurnitureItem: furnitureItem) { (success)  in
       
@@ -62,8 +81,27 @@ class FurnitureDetailsViewController: UIViewController {
     }
   }
   
-  @IBAction func selectFurnitureUnits(_ sender: Any) {
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    let unitsViewController = segue.destination as? UnitsViewController
+    unitsViewController?.delegate = self
+    unitsViewController?.currentUnit = currentFurnitureUnits
+  }
+  
+  private func addApplePay(button: UIButton?) {
     
+    if let applePayButton = button {
+      containerView.addSubview(applePayButton)
+      
+      applePayButton.snp.makeConstraints({ (maker) in
+        maker.size.equalTo(applePayButton.frame.size)
+        maker.bottom.equalTo(containerView.snp.bottom).inset(10)
+        maker.right.equalTo(containerView.snp.right).inset(20)
+      })
+      
+      defaultPaymentButton.snp.updateConstraints({ (maker) in
+        maker.width.equalTo(applePayButton.snp.width)
+      })
+    }
   }
   
   private func showFurnitureDetails() {
@@ -118,20 +156,13 @@ class FurnitureDetailsViewController: UIViewController {
                                             alpha: 1.0)
     unitsButton.round(radius: 4, withBorderColor: discountButtonBorderColor)
   }
+}
+
+extension FurnitureDetailsViewController: UnitsViewControllerDelegate {
   
-  private func addApplePayButton() {
-    
-    var applePayButton: UIButton?
-    if PKPaymentAuthorizationController.canMakePayments() {
-      applePayButton = PKPaymentButton(paymentButtonType: .buy, paymentButtonStyle: .black)
-      applePayButton?.addTarget(self, action: #selector(payPressed), for: .touchUpInside)
-    } else if PKPaymentAuthorizationController.canMakePayments(usingNetworks: paymentManager.SupportedNetworks) {
-      applePayButton = PKPaymentButton(paymentButtonType: .setUp, paymentButtonStyle: .black)
-      applePayButton?.addTarget(self, action: #selector(payPressed), for: .touchUpInside)
-    }
-    
-    if let applePayButton = applePayButton {
-      applePayButtonContainer.addSubview(applePayButton)
-    }
+  func didSelect(unit: Unit) {
+    currentFurnitureUnits = unit
+    let unitsButtonTitle = "Units: \(currentFurnitureUnits.value)"
+    unitsButton.setTitle(unitsButtonTitle, for: .normal)
   }
 }
