@@ -92,7 +92,6 @@ class PaymentManager: NSObject {
 extension PaymentManager: PKPaymentAuthorizationControllerDelegate {
   
   func paymentAuthorizationController(_ controller: PKPaymentAuthorizationController, didSelectShippingContact contact: PKContact, handler completion: @escaping (PKPaymentRequestShippingContactUpdate) -> Void) {
-    var updateContact = PKPaymentRequestShippingContactUpdate()
     var errors: [Error] = []
     
     if contact.postalAddress?.postalCode == "" {
@@ -102,12 +101,34 @@ extension PaymentManager: PKPaymentAuthorizationControllerDelegate {
     }
     
     if errors.isEmpty {
-      updateContact = PKPaymentRequestShippingContactUpdate(paymentSummaryItems: paymentItems)
+      completion(PKPaymentRequestShippingContactUpdate(paymentSummaryItems: paymentItems))
     } else {
-      updateContact = PKPaymentRequestShippingContactUpdate(errors: errors, paymentSummaryItems: paymentItems, shippingMethods: shippingMethods)
+      completion(PKPaymentRequestShippingContactUpdate(errors: errors, paymentSummaryItems: paymentItems, shippingMethods: shippingMethods))
+    }
+  }
+  
+  func paymentAuthorizationController(_ controller: PKPaymentAuthorizationController, didSelectShippingMethod shippingMethod: PKShippingMethod, handler completion: @escaping (PKPaymentRequestShippingMethodUpdate) -> Void) {
+    
+    for currentShippingMethod in paymentItems {
+      
+      if currentShippingMethod is PKShippingMethod {
+        
+        if let objectIndex = paymentItems.index(of: currentShippingMethod) {
+          let previousShippingMethod = currentShippingMethod
+          paymentItems[objectIndex] = shippingMethod
+          
+          if let totalPayment = paymentItems.last {
+            totalPayment.amount = totalPayment.amount.subtracting(previousShippingMethod.amount).adding(shippingMethod.amount)
+            
+            if let lastObjectIndex = paymentItems.index(of: totalPayment) {
+              paymentItems[lastObjectIndex] = totalPayment
+            }
+          }
+        }
+      }
     }
     
-    completion(updateContact)
+    completion(PKPaymentRequestShippingMethodUpdate(paymentSummaryItems: paymentItems))
   }
   
   func paymentAuthorizationController(_ controller: PKPaymentAuthorizationController, didAuthorizePayment payment: PKPayment, handler completion: @escaping (PKPaymentAuthorizationResult) -> Void) {
@@ -128,30 +149,6 @@ extension PaymentManager: PKPaymentAuthorizationControllerDelegate {
     }
     
     completion(PKPaymentAuthorizationResult(status: paymentStatus, errors: errors))
-  }
-  
-  func paymentAuthorizationController(_ controller: PKPaymentAuthorizationController, didSelectShippingMethod shippingMethod: PKShippingMethod, handler completion: @escaping (PKPaymentRequestShippingMethodUpdate) -> Void) {
-    
-    for currentShippingMethod in paymentItems {
-      
-      if currentShippingMethod is PKShippingMethod {
-        
-        if let objectIndex = paymentItems.index(of: currentShippingMethod) {
-          let previousShippingMethod = currentShippingMethod
-          paymentItems[objectIndex] = shippingMethod
-          
-          if let totalPayment = paymentItems.last {
-            totalPayment.amount = totalPayment.amount.subtracting(previousShippingMethod.amount).adding(shippingMethod.amount)
-        
-            if let lastObjectIndex = paymentItems.index(of: totalPayment) {
-              paymentItems[lastObjectIndex] = totalPayment
-            }
-          }
-        }
-      }
-    }
-    
-    completion(PKPaymentRequestShippingMethodUpdate(paymentSummaryItems: paymentItems))
   }
   
   func paymentAuthorizationControllerDidFinish(_ controller: PKPaymentAuthorizationController) {
