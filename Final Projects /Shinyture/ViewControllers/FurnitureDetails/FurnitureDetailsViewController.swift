@@ -44,7 +44,6 @@ class FurnitureDetailsViewController: UIViewController {
   @IBOutlet private var furnitureShippingLabel: UILabel!
   @IBOutlet private var furniturePriceLabel: UILabel!
   @IBOutlet private var furnitureDescriptionLabel: UILabel!
-  @IBOutlet private var discountButton: UIButton!
   @IBOutlet private var defaultPaymentButton: UIButton!
   @IBOutlet private var unitsButton: UIButton!
   
@@ -52,23 +51,17 @@ class FurnitureDetailsViewController: UIViewController {
     super.viewDidLoad()
     showFurnitureDetails()
     addApplePayButton()
-    styleDiscountButton()
     styleDefaultPaymentButton()
     styleUnitsButton()
   }
   
   private func addApplePayButton() {
-    var applePayButton: UIButton?
     
     if PKPaymentAuthorizationController.canMakePayments() {
-      applePayButton = PKPaymentButton(paymentButtonType: .buy, paymentButtonStyle: .black)
-      applePayButton?.addTarget(self, action: #selector(payPressed), for: .touchUpInside)
-    } else if PKPaymentAuthorizationController.canMakePayments(usingNetworks: paymentManager.SupportedNetworks) {
-      applePayButton = PKPaymentButton(paymentButtonType: .setUp, paymentButtonStyle: .black)
-      applePayButton?.addTarget(self, action: #selector(payPressed), for: .touchUpInside)
+      let applePayButton = PKPaymentButton(paymentButtonType: .buy, paymentButtonStyle: .black)
+      applePayButton.addTarget(self, action: #selector(payPressed), for: .touchUpInside)
+      addApplePay(button: applePayButton)
     }
-    
-    addApplePay(button: applePayButton)
   }
   
   @objc func payPressed() {
@@ -112,33 +105,10 @@ class FurnitureDetailsViewController: UIViewController {
       }
       
       title = furniture.name
-      
-      if furniture.discountValue.doubleValue > 0 {
-        let discount = "Discount: $\(furniture.discountValue.doubleValue)"
-        discountButton.setTitle(discount, for: .normal)
-      }
-      
       furnitureDescriptionLabel.text = furniture.description
       furniturePriceLabel.text = String("$") + String(describing: furniture.price)
-      
-      if furniture.shippingPrice.doubleValue > 0.0 {
-        furnitureShippingLabel.text = "Shipping: $" + String(describing: furniture.shippingPrice)
-      } else {
-        furnitureShippingLabel.text = "Free Shipping"
-      }
-      
-      if furniture.discountValue.doubleValue == 0.0 {
-        discountButton.isHidden = true
-      }
+      furnitureShippingLabel.text = "Free Shipping"
     }
-  }
-  
-  private func styleDiscountButton() {
-    let discountButtonBorderColor = UIColor(red: (55/255.0),
-                                            green: (51/255.0),
-                                            blue: (52/255.0),
-                                            alpha: 1.0)
-    discountButton.round(radius: 4, withBorderColor: discountButtonBorderColor)
   }
   
   private func styleDefaultPaymentButton() {

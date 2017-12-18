@@ -88,7 +88,7 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A79-Ml-GUY">
+                                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A79-Ml-GUY">
                                                 <rect key="frame" x="150" y="346" width="120" height="30"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="OLI-qD-pnt"/>
@@ -162,7 +162,6 @@
                     <connections>
                         <outlet property="containerView" destination="ct6-Yj-zgy" id="dox-NZ-ytX"/>
                         <outlet property="defaultPaymentButton" destination="vgP-Wd-jjF" id="G0j-nf-4zc"/>
-                        <outlet property="discountButton" destination="A79-Ml-GUY" id="DBs-i2-2TD"/>
                         <outlet property="furnitureDescriptionLabel" destination="ZrJ-Xc-QXp" id="K2l-eq-kLj"/>
                         <outlet property="furnitureImageView" destination="cwB-89-OsV" id="Pch-F8-JZZ"/>
                         <outlet property="furniturePriceLabel" destination="zQm-Hh-kgZ" id="Z3f-Yr-AbS"/>

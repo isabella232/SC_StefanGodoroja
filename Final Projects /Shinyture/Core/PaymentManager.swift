@@ -31,68 +31,60 @@ import PassKit
 typealias PaymentManagerCompletionHandler = (Bool) -> Void
 
 class PaymentManager: NSObject {
-  let MerchantID = "merchant.rw.shinyture.raywenderlich"
-  let SupportedNetworks: [PKPaymentNetwork] = [.visa, .masterCard, .amex]
-  
-  var completionHandler: PaymentManagerCompletionHandler?
-  
+  private var completionHandler: PaymentManagerCompletionHandler?
   private var paymentStatus = PKPaymentAuthorizationStatus.failure
   private var shippingMethods: [PKShippingMethod] = []
   private var paymentItems: [PKPaymentSummaryItem] = []
-  private var paymentController: PKPaymentAuthorizationController?
   
   func pay(forFurnitureItem item: Furniture?, completion: @escaping PaymentManagerCompletionHandler) {
+    cleanup()
     completionHandler = completion
     
     if let item = item {
       let request = PKPaymentRequest()
-      request.merchantIdentifier = MerchantID
+      request.merchantIdentifier = "merchant.rw.shinyture.raywenderlich"
       request.merchantCapabilities = .capability3DS
       request.countryCode = "US"
       request.currencyCode = "USD"
-      request.supportedNetworks = SupportedNetworks
+      request.supportedNetworks = [.visa, .masterCard, .amex]
       request.requiredBillingContactFields = [ .name]
       request.requiredShippingContactFields = [.postalAddress, .phoneNumber, .emailAddress]
       
-  
-      for _ in 0..<item.units {
-        let itemPayment = PKPaymentSummaryItem(label: item.name,
-                                               amount: item.price,
-                                               type: .final)
-        paymentItems.append(itemPayment)
-      }
+      let totalItemsName = "\(item.units) items of " + item.name
+      let totalItemsPrice = item.price.multiplying(by: NSDecimalNumber(value: item.units))
+      let itemPayment = PKPaymentSummaryItem(label: totalItemsName,
+                                             amount: totalItemsPrice,
+                                             type: .final)
+      paymentItems.append(itemPayment)
       
-      if item.shippingPrice.doubleValue > 0 {
-        let paidShippingMethod = PKShippingMethod(label: "Paid Shipping", amount: item.shippingPrice)
-        paidShippingMethod.identifier = "Paid Shipping"
-        paidShippingMethod.detail = "Paid Shipping in 1 day"
-        shippingMethods.append(paidShippingMethod)
-      } else {
-        let freeShippingMethod = PKShippingMethod(label: "Free Shipping", amount: NSDecimalNumber.zero)
-        freeShippingMethod.identifier = "Free Shipping"
-        freeShippingMethod.detail = "Free Shipping in 7 days"
-        shippingMethods.append(freeShippingMethod)
-      }
+      let freeShippingMethod = PKShippingMethod(label: "Free Shipping", amount: NSDecimalNumber.zero)
+      freeShippingMethod.identifier = "free"
+      freeShippingMethod.detail = "Free Shipping in 7 days"
+      shippingMethods.append(freeShippingMethod)
+      paymentItems.append(freeShippingMethod)
       
-      if item.discountValue.doubleValue > 0 {
-        let discountPayment = PKPaymentSummaryItem(label: "Discount",
-                                                   amount: item.discountValue.negative(),
-                                                   type: .final)
-        paymentItems.append(discountPayment)
-      }
+      let paidShippingMethod = PKShippingMethod(label: "Paid Shipping", amount: item.shippingPrice)
+      paidShippingMethod.identifier = "paid"
+      paidShippingMethod.detail = "Paid Shipping in 1 day"
+      shippingMethods.append(paidShippingMethod)
       
-      let totalPrice = item.price.multiplying(by: NSDecimalNumber(value: item.units)).adding(item.shippingPrice).subtracting(item.discountValue)
       let totalPayment = PKPaymentSummaryItem(label: "Shinyture",
-                                              amount: totalPrice,
+                                              amount: totalItemsPrice,
                                               type: .final)
       paymentItems.append(totalPayment)
       request.paymentSummaryItems = paymentItems
       request.shippingMethods = shippingMethods
       
-      paymentController = PKPaymentAuthorizationController(paymentRequest: request)
-      paymentController?.delegate = self
-      paymentController?.present(completion: nil)
+      let paymentController = PKPaymentAuthorizationController(paymentRequest: request)
+      paymentController.delegate = self
+      paymentController.present(completion: nil)
     }
+  }
+  
+  private func cleanup() {
+    paymentStatus = PKPaymentAuthorizationStatus.failure
+    shippingMethods = []
+    paymentItems = []
   }
 }
 
@@ -100,16 +92,13 @@ class PaymentManager: NSObject {
 extension PaymentManager: PKPaymentAuthorizationControllerDelegate {
   
   func paymentAuthorizationController(_ controller: PKPaymentAuthorizationController, didSelectShippingContact contact: PKContact, handler completion: @escaping (PKPaymentRequestShippingContactUpdate) -> Void) {
-    
     var updateContact = PKPaymentRequestShippingContactUpdate()
     var errors: [Error] = []
     
-    if contact.emailAddress == "" {
-      let emailError = PKPaymentRequest.paymentContactInvalidError(withContactField: .emailAddress, localizedDescription: "Shipping requires your email")
-      errors.append(emailError)
-    } else if contact.postalAddress?.city == "" {
-      let cityAddressError = PKPaymentRequest.paymentShippingAddressInvalidError(withKey: CNPostalAddressCityKey, localizedDescription:"Shipping requires your city")
-      errors.append(cityAddressError)
+    if contact.postalAddress?.postalCode == "" {
+      let zipError = PKPaymentRequest.paymentShippingAddressInvalidError(withKey: CNPostalAddressPostalCodeKey,
+                                                                         localizedDescription: "Shipping requires your ZIP code")
+      errors.append(zipError)
     }
     
     if errors.isEmpty {
@@ -119,6 +108,50 @@ extension PaymentManager: PKPaymentAuthorizationControllerDelegate {
     }
     
     completion(updateContact)
+  }
+  
+  func paymentAuthorizationController(_ controller: PKPaymentAuthorizationController, didAuthorizePayment payment: PKPayment, handler completion: @escaping (PKPaymentAuthorizationResult) -> Void) {
+    var errors: [Error] = []
+    
+    if let emailAddress = payment.shippingContact?.emailAddress {
+      
+      if emailAddress.isValidEmail() == false {
+        let invalidEmailError = PKPaymentRequest.paymentContactInvalidError(withContactField: .emailAddress, localizedDescription: "Email has incorrect format")
+        errors.append(invalidEmailError)
+      }
+    }
+    
+    if errors.isEmpty {
+      paymentStatus = .success
+    } else {
+      paymentStatus = .failure
+    }
+    
+    completion(PKPaymentAuthorizationResult(status: paymentStatus, errors: errors))
+  }
+  
+  func paymentAuthorizationController(_ controller: PKPaymentAuthorizationController, didSelectShippingMethod shippingMethod: PKShippingMethod, handler completion: @escaping (PKPaymentRequestShippingMethodUpdate) -> Void) {
+    
+    for currentShippingMethod in paymentItems {
+      
+      if currentShippingMethod is PKShippingMethod {
+        
+        if let objectIndex = paymentItems.index(of: currentShippingMethod) {
+          let previousShippingMethod = currentShippingMethod
+          paymentItems[objectIndex] = shippingMethod
+          
+          if let totalPayment = paymentItems.last {
+            totalPayment.amount = totalPayment.amount.subtracting(previousShippingMethod.amount).adding(shippingMethod.amount)
+        
+            if let lastObjectIndex = paymentItems.index(of: totalPayment) {
+              paymentItems[lastObjectIndex] = totalPayment
+            }
+          }
+        }
+      }
+    }
+    
+    completion(PKPaymentRequestShippingMethodUpdate(paymentSummaryItems: paymentItems))
   }
   
   func paymentAuthorizationControllerDidFinish(_ controller: PKPaymentAuthorizationController) {
@@ -133,43 +166,6 @@ extension PaymentManager: PKPaymentAuthorizationControllerDelegate {
         }
       }
     }
-    
   }
   
-  func paymentAuthorizationController(_ controller: PKPaymentAuthorizationController, didSelectPaymentMethod paymentMethod: PKPaymentMethod, handler completion: @escaping (PKPaymentRequestPaymentMethodUpdate) -> Void) {
-    
-    if paymentMethod.type == .debit {
-      var discountedItems = paymentItems
-      let discountItem = PKPaymentSummaryItem(label: "Debit Card Discount", amount: NSDecimalNumber(string: "-5.00"))
-      discountedItems.insert(discountItem, at: paymentItems.count - 1)
-      
-      if let totalPaidItem = paymentItems.last {
-        totalPaidItem.amount = totalPaidItem.amount.subtracting(NSDecimalNumber(string: "5.00"))
-      }
-      
-      completion(PKPaymentRequestPaymentMethodUpdate(paymentSummaryItems: discountedItems))
-    } else {
-      completion(PKPaymentRequestPaymentMethodUpdate(paymentSummaryItems: paymentItems))
-    }
-  }
-  
-  func paymentAuthorizationController(_ controller: PKPaymentAuthorizationController, didAuthorizePayment payment: PKPayment, handler completion: @escaping (PKPaymentAuthorizationResult) -> Void) {
-    var errors: [Error] = []
-    
-    if let emailAddress = payment.shippingContact?.emailAddress {
-      
-      if emailAddress.isValidEmail() == false {
-        let invalidEmailError = PKPaymentRequest.paymentContactInvalidError(withContactField: .emailAddress, localizedDescription: "Email has incorect format")
-        errors.append(invalidEmailError)
-      }
-    }
-    
-    if errors.isEmpty {
-      paymentStatus = .success
-    } else {
-      paymentStatus = .failure
-    }
-    
-    completion(PKPaymentAuthorizationResult(status: paymentStatus, errors: errors))
-  }
 }
