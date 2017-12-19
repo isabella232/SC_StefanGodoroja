@@ -37,7 +37,6 @@ class PaymentManager: NSObject {
   private var paymentItems: [PKPaymentSummaryItem] = []
   
   func pay(forFurnitureItem item: Furniture?, completion: @escaping PaymentManagerCompletionHandler) {
-    cleanup()
     completionHandler = completion
     
     if let item = item {
@@ -79,12 +78,6 @@ class PaymentManager: NSObject {
       paymentController.delegate = self
       paymentController.present(completion: nil)
     }
-  }
-  
-  private func cleanup() {
-    paymentStatus = PKPaymentAuthorizationStatus.failure
-    shippingMethods = []
-    paymentItems = []
   }
 }
 
@@ -152,7 +145,6 @@ extension PaymentManager: PKPaymentAuthorizationControllerDelegate {
   }
   
   func paymentAuthorizationControllerDidFinish(_ controller: PKPaymentAuthorizationController) {
-    
     controller.dismiss {
       DispatchQueue.main.async {
         
@@ -161,6 +153,10 @@ extension PaymentManager: PKPaymentAuthorizationControllerDelegate {
         } else {
           self.completionHandler?(false)
         }
+        
+        self.paymentStatus = .failure
+        self.shippingMethods = []
+        self.paymentItems = []
       }
     }
   }

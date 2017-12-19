@@ -34,7 +34,6 @@ class PaymentManager: NSObject {
   private var completionHandler: PaymentManagerCompletionHandler?
   
   func pay(forFurnitureItem item: Furniture?, completion: @escaping PaymentManagerCompletionHandler) {
-    cleanup()
     completionHandler = completion
     
     if let _ = item {
@@ -42,7 +41,4 @@ class PaymentManager: NSObject {
     }
   }
   
-  private func cleanup() {
-
-  }
 }
