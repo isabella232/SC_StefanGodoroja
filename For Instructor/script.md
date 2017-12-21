@@ -20,9 +20,10 @@ easier when paying for real world goods and services.
 Hey what’s up everybody, this is Brian. In today's screencast I'm going to introduce you to Apple Pay technology and how it can be integrated
 in your own app.
 
-First, I’d like to thank Ștefan Godoroja for preparing the materials for this course and tech_editor_name! for acting as tech editor. Check them out on twitter!
+First, I’d like to thank Ștefan Godoroja for preparing the materials for this course. Check him out on twitter!
 
 Apple Pay is a fast, easy and secured way to pay in your iOS and watchOS apps or in extensions. Users can provide payments, shipping and contact information to checkout securely by using Face ID, Touch ID or double-click the side button on Apple Watch. Think of Apple Pay as an express checkout which doesn't require each time to add a card or to fill out lengthy forms to complete the purchase. User gets a seamless payment experience, you get a secured payment system easy to add in your app. The difference between Apple Pay and In-App Purchases is that Apple Pay is used for paying real world goods and services, where a certified third-party processes the payment, on the other hand In-App Purchases is used to buy digital services, content and subscriptions, and Apple takes care of the payment process. 
+
 We'll integrate Apple Pay in our app called Shinyture, developed for selling furniture items. We'll touch key moments like
 payment flow architecture, setup project to use Apple Pay, creating and handling payment requests.
 
