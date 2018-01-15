@@ -22,16 +22,20 @@ in your own app.
 
 First, I’d like to thank Ștefan Godoroja for preparing the materials for this course. Check him out on twitter!
 
-Apple Pay is a fast, easy and secured way to pay in your iOS and watchOS apps or in extensions. Users can provide payments, shipping and contact information to checkout securely by using Face ID, Touch ID or double-click the side button on Apple Watch. Think of Apple Pay as an express checkout which doesn't require each time to add a card or to fill out lengthy forms to complete the purchase. User gets a seamless payment experience, you get a secured payment system easy to add in your app. The difference between Apple Pay and In-App Purchases is that Apple Pay is used for paying real world goods and services, where a certified third-party processes the payment, on the other hand In-App Purchases is used to buy digital services, content and subscriptions, and Apple takes care of the payment process. 
+Apple Pay is a fast, easy and secured way to pay in your iOS and watchOS apps or in extensions. Users can provide payments, shipping and contact information to checkout securely by using Face ID, Touch ID or double-click the side button on Apple Watch. Think of Apple Pay as an express checkout which doesn't require each time to add a card or to fill out lengthy forms to complete the purchase. User gets a seamless payment experience, you get a secured payment system easy to add in your app. 
+
+## [Slide 01]
+
+The difference between Apple Pay and In-App Purchases is that Apple Pay is used for paying real world goods and services, where a certified third-party processes the payment, on the other hand In-App Purchases is used to buy digital services, content and subscriptions, and Apple takes care of the payment process. 
 
 We'll integrate Apple Pay in our app called Shinyture, developed for selling furniture items. We'll touch key moments like
 payment flow architecture, setup project to use Apple Pay, creating and handling payment requests.
 
 Wow, that's a lot of things, so let's start!
 
-## Talking Head
+## [Slide 02] - [Slide 08]
 
-The payment flow starts with checking whether device can make payments using Apple Pay or if it has cards which supports payment networks your app asks for, like Visa or Mastercard. If so then app can create a payment request and present the payment sheet. Your app responds to user interaction from the payment sheet using delegate methods. After user authorized payment request using Touch ID or Face ID, payment information is send to the Secure Element which is a dedicated hardware chip containing card information. Secure Element encrypts payment data using Merchant ID which results in a payment token. This token is passed to Apple Servers, but never stored or accessed there, but merely re-encrypted using Payment Processing certificate. Finally Apple Servers, pass back the payment token to the app. In last step, your app sends the payment token to the payment provider which can decrypt and process the final payment. 
+The payment flow starts with checking whether device can make payments using Apple Pay or if it has cards which supports payment networks your app asks for, like Visa or Mastercard. If so then app can create a payment request and present the payment sheet. Your app responds to user interaction from the payment sheet using delegate methods. After user authorized payment request using Touch ID or Face ID, payment information is send to the Secure Element which is a dedicated hardware chip containing card information. Secure Element encrypts payment data using Merchant ID which results in a payment token. This token is passed to Apple Servers, but never stored or accessed there, but merely re-encrypted using Payment Processing certificate. Finally Apple Servers, pass back the payment token to the app. In the last step, your app sends the payment token to the payment provider which manages the payment. 
 
 ## Demo
 
@@ -39,7 +43,15 @@ First we need to configure our enviroment which will allow to implement Apple Pa
 
 ## Talking Head
 
-We won't use any payment provider in this video because there are a lot of them, many providing native SDKs to work with Apple Pay, so it's up to you to choose the one which fits your needs, but I have few more words to say. A payment providers is a party authorized to handle payments. You can find a list of providers on developer.apple.com. Apple recommended to use an already existing provider than to handle payments yourself, otherwise you'll need a payment infrastructure able to decrypt and process payments. The payment processing certificate is associated with your merchant id. This certificate can be create on developer portal, in Certificates, Identifiers & Profiles page, in the Merchant IDs section, when editing a merchant ID. Usually you ask payment provider for a Certificate Signing Request file, upload it on developer portal then generate the certificate and in the end you send it to the payment provider. It will use it for decrypting payment tokens.
+We won't use any payment provider in this video because there are a lot of them, many providing native SDKs to work with Apple Pay, so it's up to you to choose the one which fits your needs, but I have few more words to say. 
+
+## [Slide 09]
+
+A payment providers is a party authorized to handle payments. You can find a list of providers on developer.apple.com. Apple recommended to use an already existing provider than to handle payments yourself, otherwise you'll need a payment infrastructure able to decrypt and process payments. 
+
+## [Slide 10]
+
+The payment processing certificate is associated with your merchant id. This certificate can be created on developer portal, in Certificates, Identifiers & Profiles page, in the Merchant IDs section, when editing a merchant ID. Usually you ask payment provider for a Certificate Signing Request file, upload it on developer portal then generate the certificate and in the end you send it to the payment provider. It will use it for decrypting payment tokens.
 
 ## Demo
 
@@ -237,9 +249,13 @@ initial values for the future payment request.
   }
  ```
 
-## Talking Head
+## [Slide 10]
 
-Testing on a simulator is not an option even because it has built-in payment cards. The problem is that payment token which must be send for processing isn't valid, it's just some dummy text. The best way to do it is using Apple Pay Sandbox Testing enviroment. In iTunes Connect, on the Users and Roles page, create a sandbox tester. When done, sign in with this new sandbox tester account on your testing device. Important to mention is that device region must be set to a country which supports Apple Pay otherwise you won't be able to add test cards. Now that you have a testing account, you can add a test card in Wallet app, using manual entry. A list of test cards can be found developer.apple.com. After adding a payment
+Testing on a simulator is not an option even because it has built-in payment cards. The problem is that payment token which must be send for processing isn't valid, it's just some dummy text. 
+
+## [Slide 11]
+
+The best way to do it is using Apple Pay Sandbox Testing enviroment. In iTunes Connect, on the Users and Roles page, create a sandbox tester. When done, sign in with this new sandbox tester account on your testing device. Important to mention is that device region must be set to a country which supports Apple Pay otherwise you won't be able to add test cards. Now that you have a testing account, you can add a test card in Wallet app, using manual entry. A list of test cards can be found developer.apple.com. After adding a payment
 card you can start testing. But don't forget to test Apple Pay on production enviroment using real cards, because test cards won't work there. 
 
 ## Demo
