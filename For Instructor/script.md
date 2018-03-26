@@ -51,7 +51,7 @@ A payment providers is a party authorized to handle payments. You can find a lis
 
 ## [Slide 10]
 
-The payment processing certificate is associated with your merchant id. This certificate can be created on developer portal, in Certificates, Identifiers & Profiles page, in the Merchant IDs section, when editing a merchant ID. Usually you ask payment provider for a Certificate Signing Request file, upload it on developer portal then generate the certificate and in the end you send it to the payment provider. It will use it for decrypting payment tokens.
+The payment processing certificate is associated with your merchant id. This certificate can be created on developer portal, in Certificates, Identifiers & Profiles page, in the Merchant IDs section, when editing a merchant ID. Usually you ask payment provider for a Certificate Signing Request file, upload it on developer portal then generate the certificate and in the end you send it to the payment provider, but in our case we'll use a local generated CSR file. Don't forget to download and install the generated certificate.
 
 ## Demo
 
