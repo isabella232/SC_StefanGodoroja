@@ -27,9 +27,16 @@
 /// THE SOFTWARE.
 
 import UIKit
+import Stripe
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
   var window: UIWindow?
+  
+  func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    STPPaymentConfiguration.shared().publishableKey = "pk_test_mttU1lclPFx3r43L6267tmfq"
+    // do any other necessary launch configuration
+    return true
+  }
 }
 

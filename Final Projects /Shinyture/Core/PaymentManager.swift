@@ -27,6 +27,7 @@
 /// THE SOFTWARE.
 
 import PassKit
+import Stripe
 
 typealias PaymentManagerCompletionHandler = (Bool) -> Void
 
@@ -135,13 +136,54 @@ extension PaymentManager: PKPaymentAuthorizationControllerDelegate {
       }
     }
     
-    if errors.isEmpty {
-      paymentStatus = .success
-    } else {
+    // Update first screencast text
+    if errors.isEmpty == false {
       paymentStatus = .failure
+      completion(PKPaymentAuthorizationResult(status: paymentStatus, errors: errors))
     }
     
-    completion(PKPaymentAuthorizationResult(status: paymentStatus, errors: errors))
+    STPAPIClient.shared().createToken(with: payment) { token, error in
+      
+      if (error != nil) {
+        self.paymentStatus = .failure
+        completion(PKPaymentAuthorizationResult(status: self.paymentStatus, errors: errors))
+        return
+      }
+      
+      // Replace with computers local IP Address!
+      let url = NSURL(string: "http://<your ip address>/pay")
+      let request = NSMutableURLRequest(url: url! as URL)
+      request.httpMethod = "POST"
+      request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+      request.setValue("application/json", forHTTPHeaderField: "Accept")
+      
+      // 6
+      let totalAmount = self.paymentItems.first?.amount
+      let totalDescription = self.paymentItems.first?.description
+
+      let body = ["stripeToken": token!.tokenId,
+                  "amount": totalAmount!.multiplying(by: NSDecimalNumber(string: "100")),
+                  "description": totalDescription!,
+                  "shipping": [
+                    "city": payment.shippingContact?.postalAddress?.city,
+                    "street": payment.shippingContact?.postalAddress?.street,
+                    "phoneNumber": payment.shippingContact?.phoneNumber?.stringValue]
+        ] as [String : Any]
+      
+      request.httpBody = try? JSONSerialization.data(withJSONObject: body, options: JSONSerialization.WritingOptions())
+      
+      URLSession.shared.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
+      
+        if (error != nil) {
+          self.paymentStatus = .failure
+        } else {
+          self.paymentStatus = .success
+        }
+        
+      })
+      
+      completion(PKPaymentAuthorizationResult(status: self.paymentStatus, errors: errors))      
+    }
   }
   
   func paymentAuthorizationControllerDidFinish(_ controller: PKPaymentAuthorizationController) {

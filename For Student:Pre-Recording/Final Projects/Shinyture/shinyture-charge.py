@@ -11,7 +11,7 @@ def pay():
 
   #2
   # Set this to your Stripe secret key (use your test key!)
-  stripe.api_key = "sk_test_YOUR_TEST_KEY_HERE"
+  stripe.api_key = "sk_test_rR5v3sTLRIIcB7FRGfMTSAqq"
 
   #3
   # Parse the request as JSON

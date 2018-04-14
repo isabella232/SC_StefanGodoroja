@@ -70,8 +70,39 @@ sudo pip install --index-url https://code.stripe.com --upgrade stripe
 In the root folder of the project there is shinyture-charge.py file, which contains our server code. You don't need to understand much here, the only
 thing is required from you is to set your secret key from the Stripe account. You can find it in API Keys section. Remember that this must be the test key!
 
-The last step 
+The last step is to start the server
 
+```
+python shinyture-charge.py
+```
+
+
+## Talking Head
+
+At this stage we have a server able to receive payments from the mobile app and to request Stripe to finalize them. Now we need to install Stripe iOS SDK. There are several ways to install and configure the SDK, using Cocoapods, Carthage, Fabric, Static Framework and the last one, Dynamic Framework which we'll use.
+
+## Demo
+
+Initial step is to download the latest release of the Stripe framework from https://github.com/stripe/stripe-ios/releases. Then drag the Stripe framework
+file to the "Embedded Binaries" section of your Xcode project. The last step is to create a new "Run Script Build Phase" and paste the following statement
+
+```
+bash "${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Stripe.framework/integrate-dynamic-framework.sh"
+```
+
+## Talking Head
+
+The last stage which sticks all the parts we've setup, is to write code which initialize Stripe, obtain Stripe token for the payment and send it to our backend which will trigger the payment on Stripe. 
+
+## Demo
+
+In AppDelegate.swift import Stripe framework. Then in didFinishLaunchingWithOptions() method add 
+
+```
+STPPaymentConfiguration.shared().publishableKey = "YOUR_PUBLISHABLE_KEY"
+```
+
+Replace YOUR_PUBLISHABLE_KEY with your key. You can find it in the same place as secret key, under API Keys section of your Stripe account. Now let's switch to PaymentManager.swift file. First we'll add the import statement for Stripe framework. 
 
 ## Demo
 
