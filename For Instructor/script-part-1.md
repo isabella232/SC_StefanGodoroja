@@ -248,6 +248,16 @@ card you can start testing. But don't forget to test Apple Pay on production env
 
 ## Demo
 
+Now let's run the demo. I'll select the first furniture item, we see here furniture details like price, unit counter, at the bottom of screen there is a button for standart payment and a Apple Pay button. But first let's select 2 units of this furniture. Now we want to pay for it. If device hasn't any cards in the Wallet app then you'll be invited to add one. You can use this one
+
+```
+MasterCard; FPAN: 5204 2477 5000 1471; Expiration Date: 11/2022; CVC: 111
+```
+
+But Apple provides more cards which can be found at https://developer.apple.com/support/apple-pay-sandbox/ so you're free to use any of those.
+
+// 
+
 Let's run the project. I'll select the first furniture item, we see furniture details like price, unit counter, at the bottom of screen there is a button for standart payment and a Apple Pay button. First, let's select 2 units of this furniture. Now we want to pay for it. Payment sheet contains a lot of information starting with selected payment card, shipping information, shipping method, contact information and list of costs: subtotal, shipping cost and the total amount. Now let's select a paid shipping method. As you can see the list of costs was updated properly and the free shipping was replaced with paid shipping. Now let's remove zip code from the shipping address to see if app reacts and alerts user that zip code is required. We see that the address field is highlighted with red, with a clear message that it requires zip code. We'll type back the zip code, and the error message will disappear. Now let's authorize the payment, it processes the payment and boom! App shows the confirmation screen.
 
 ## Conclusion

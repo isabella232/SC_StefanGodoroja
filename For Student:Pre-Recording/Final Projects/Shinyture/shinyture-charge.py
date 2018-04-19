@@ -5,7 +5,6 @@ from flask import json
 
 app = Flask(__name__)
 
-#1
 @app.route('/pay', methods=['POST'])
 def pay():
 
@@ -40,4 +39,4 @@ def pay():
 
 if __name__ == '__main__':
   # Set as 0.0.0.0 to be accessible outside your local machine
-  app.run(debug=True, host= '0.0.0.0')
+  app.run(debug=True, host='0.0.0.0')
