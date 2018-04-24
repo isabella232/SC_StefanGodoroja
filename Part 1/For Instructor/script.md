@@ -6,8 +6,8 @@ PassKit: Integrate Apple Pay in your app. Part 1.
 
 ## Screencast Description
 
-A showcase of how Apple Pay makes developers and users life
-easier when paying for real world goods and services.
+A showcase of how to implement Apple Pay in an app
+and how it authorizes payments.
 
 ## Language, Editor and Platform versions used in this screencast:
 
@@ -17,8 +17,10 @@ easier when paying for real world goods and services.
 
 ## Introduction
 
-Hey what’s up everybody, this is Brian. In today's screencast I'm going to introduce you to Apple Pay technology and how it can be integrated
-in your own app.
+Hey what’s up everybody, this is Brian. This screencast is split into 2 parts: first part shows how to integrate Apple Pay APIs and
+how it authorizes payments; the second part demonstrates how to integrate app with a payment processor which takes care of final
+payment and a backend which communicates with app and the payment processor. So in today's screencast I'm going to introduce you to Apple Pay, 
+show how to implemented it's APIs and what features it offers to us, developers.
 
 First, I’d like to thank Ștefan Godoroja for preparing the materials for this course. Check him out on twitter!
 
@@ -29,13 +31,13 @@ Apple Pay is a fast, easy and secured way to pay in your iOS and watchOS apps or
 The difference between Apple Pay and In-App Purchases is that Apple Pay is used for paying real world goods and services, where a certified third-party processes the payment, on the other hand In-App Purchases is used to buy digital services, content and subscriptions, and Apple takes care of the payment process. 
 
 We'll integrate Apple Pay in our app called Shinyture, developed for selling furniture items. We'll touch key moments like
-payment flow architecture, setup project to use Apple Pay, creating and authorizing payment requests.
+payment authorization architecture, setup project to use Apple Pay, creating and authorizing payment requests.
 
 Wow, that's a lot of things, so let's start!
 
-## [Slide 02] - [Slide 08]
+## [Slide 02] - [Slide 07]
 
-The payment flow starts with checking whether device can make payments using Apple Pay or if it has cards which supports payment networks your app asks for, like Visa or Mastercard. If so then app can create a payment request and present the payment sheet. Your app responds to user interaction from the payment sheet using delegate methods. After user authorized payment request using Touch ID or Face ID, payment information is send to the Secure Element which is a dedicated hardware chip containing card information. Secure Element encrypts payment data using Merchant ID which results in a payment token. This token is passed to Apple Servers, but never stored or accessed there, but merely re-encrypted using Payment Processing certificate. Finally Apple Servers, pass back the payment token to the app. In the last step, your app sends the payment token to the payment provider which manages the payment. 
+The payment authorization flow starts with checking whether device can make payments using Apple Pay or if it has cards which supports payment networks your app asks for, like Visa or Mastercard. If so then app can create a payment request and present the payment sheet. Your app responds to user interaction from the payment sheet using delegate methods. After user authorized payment request using Touch ID or Face ID, payment information is send to the Secure Element which is a dedicated hardware chip containing card information. Secure Element encrypts payment data using Merchant ID which results in a payment token. This token is passed to Apple Servers, but never stored or accessed there, but merely re-encrypted using Payment Processing certificate. Finally Apple Servers, pass back the payment token to the app. As a conclusion, the payment was successfully authorized and the payment token was created. That token is usually sent to the payment processor for taking actions, and as I said will be discussed in the next screencast.
 
 ## Demo
 
@@ -70,7 +72,7 @@ Now switch to PaymentManager class. First, import PassKit framework at the top o
 
 ``` 
       let request = PKPaymentRequest()
-      request.merchantIdentifier = "merchant.rw.shinyture.raywenderlich"
+      request.merchantIdentifier = "YOUR_MERCHANT_IDENTIFIER"
       request.merchantCapabilities = .capability3DS
       request.countryCode = "US"
       request.currencyCode = "USD"
@@ -237,34 +239,30 @@ initial values for the future payment request.
   }
  ```
 
-## [Slide 9]
+## [Slide 8]
 
 Testing on a simulator is not an option even because it has built-in payment cards. The problem is that payment token which must be send for processing isn't valid, it's just some dummy text. 
 
-## [Slide 10]
+## [Slide 9]
 
-The best way to do it is using Apple Pay Sandbox Testing enviroment. In iTunes Connect, on the Users and Roles page, create a sandbox tester. When done, sign in with this new sandbox tester account on your testing device. Important to mention is that device region must be set to a country which supports Apple Pay otherwise you won't be able to add test cards. Now that you have a testing account, you can add a test card in Wallet app, using manual entry. A list of test cards can be found developer.apple.com. After adding a payment
-card you can start testing. But don't forget to test Apple Pay on production enviroment using real cards, because test cards won't work there. 
+The best way to do it is using Apple Pay Sandbox Testing enviroment. In iTunes Connect, on the Users and Roles page create a new sandbox tester. It's important to mention when you'll use that account, device region must be same as for sandbox account. Now that you have a testing account, you can add test cards in Wallet app, using manual entry. A list of test cards can be found on https://developer.apple.com/support/apple-pay-sandbox/. After adding a payment card you can start testing. But don't forget to test Apple Pay on production enviroment using real cards, because test cards won't work there.
 
 ## Demo
 
-Now let's run the demo. I'll select the first furniture item, we see here furniture details like price, unit counter, at the bottom of screen there is a button for standart payment and a Apple Pay button. But first let's select 2 units of this furniture. Now we want to pay for it. If device hasn't any cards in the Wallet app then you'll be invited to add one. You can use this one
+First, we need to sign in using testing account. Then, we need to add a test card. I'm using
 
 ```
-MasterCard; FPAN: 5204 2477 5000 1471; Expiration Date: 11/2022; CVC: 111
+MasterCard
+FPAN: 5204 2477 5000 1471
+Expiration Date: 11/2022
+CVC: 111
 ```
 
-But Apple provides more cards which can be found at https://developer.apple.com/support/apple-pay-sandbox/ so you're free to use any of those.
-
-// 
-
-Let's run the project. I'll select the first furniture item, we see furniture details like price, unit counter, at the bottom of screen there is a button for standart payment and a Apple Pay button. First, let's select 2 units of this furniture. Now we want to pay for it. Payment sheet contains a lot of information starting with selected payment card, shipping information, shipping method, contact information and list of costs: subtotal, shipping cost and the total amount. Now let's select a paid shipping method. As you can see the list of costs was updated properly and the free shipping was replaced with paid shipping. Now let's remove zip code from the shipping address to see if app reacts and alerts user that zip code is required. We see that the address field is highlighted with red, with a clear message that it requires zip code. We'll type back the zip code, and the error message will disappear. Now let's authorize the payment, it processes the payment and boom! App shows the confirmation screen.
+Let's run the project. I'll select the first furniture item, we see furniture details like price, unit counter, at the bottom of screen there is a button for standart payment and a Apple Pay button. First, let's select 2 units of this furniture. Now we want to pay for it. Payment sheet contains a lot of information starting with selected payment card, shipping information, shipping method, contact information and list of costs: subtotal, shipping cost and the total amount. If you don't have any shipping address and any contact than the payment sheet will warn you and won't allow to authorize payment 
+because it requires this data. For shipping address I'll add my first name, last name, then street and zip code. Let's go back and select Contact field which requires my phone number and email address. I'll type these and then back to main sheet. Everything seems fine. Now let's select a paid shipping method. As you can see the list of costs was updated properly and the free shipping was replaced with paid shipping. Now let's remove zip code from the shipping address to see if app reacts and alerts user that zip code is required. We see that the address field is highlighted with red, with a clear message that it requires zip code. We'll type back the zip code, and the error message will disappear. Now let's authorize the payment, it processes the payment and boom! App shows the confirmation screen. Again, at this stage payment is authorized only, not processed and finished.
 
 ## Conclusion
 
 Alright, that’s everything I’d like to cover in this video. At this point you should feel comfortable with Apple Pay, starting from basic concepts and enviroment setup, and ending with testing using Apple Pay Sandbox Testing enviroment. If you want to learn more check out Apple Pay Programming Guide webpage: https://developer.apple.com/library/content/ApplePay_Guide/index.html#//apple_ref/doc/uid/TP40014764-CH1-SW1, particularly paying attention to PKPaymentAuthorizationControllerDelegate protocol which has few more methods that can fit your more specific needs.
-
-Actually this screencast could be shorter if Ray would be willing to share his credit card credentials, but he nicely refused :[, arguing that he
-needs money for the Christmas party.
 
 Bye!

@@ -6,8 +6,7 @@ PassKit: Integrate Apple Pay in your app. Part 2.
 
 ## Screencast Description
 
-A showcase of how Apple Pay makes developers and users life
-easier when paying for real world goods and services.
+A showcase of how to integrate a payment processor and a backend with Apple Pay.
 
 ## Language, Editor and Platform versions used in this screencast:
 
@@ -17,12 +16,12 @@ easier when paying for real world goods and services.
 
 ## Introduction
 
-Hey what’s up everybody, this is Brian. In today's screencast I'm going to show how to use a payment processor to fulfill payment 
-transactions that are authorized by Apple Pay.
+Hey what’s up everybody, this is Brian. In the first part of the screencast we discussed about how to setup Apple Pay and how
+it authorizes payment. Now, I'm going to show how to use a payment processor and a backend to fulfill payment transactions.
 
 First, I’d like to thank Ștefan Godoroja for preparing the materials for this course. Check him out on twitter!
 
-Apple Pay is supported by a wide range of payment platforms, so you have plenty of ready solutions to use. A payment provider is a party authorized to handle payments. You can find a list of providers on developer.apple.com. Apple recommends to use an existing provider than to handle payments yourself, otherwise you'll need a payment infrastructure able to decrypt and process payments. In this screencast we'll use Stripe because it's very easy to configure and it comes with a built-in test payment enviroment. Using that enviroment you can test purchases in your app without incurring real charges.
+Apple Pay is supported by a wide range of payment platforms, so you have plenty of ready solutions to use. A payment provider is a party authorized to handle payments. You can find a list of providers on https://developer.apple.com/support/apple-pay-sandbox/. Apple recommends to use an existing provider than to handle payments yourself, otherwise you'll need a payment infrastructure able to decrypt and process payments. In this screencast we'll use Stripe because it's very easy to configure and it comes with a built-in test payment enviroment. Using that enviroment you can test purchases in your app without incurring real charges.
 
 ## [Slide 01] - [Slide 02]
 
@@ -35,12 +34,11 @@ it to the backend. The actual charge of user's card is performed on the custom s
 
 ## Talking Head
 
-Now that we have basic idea of how things work together, let's implement each step in details. The first step and very important one, you need to create a free Stripe account. 
+Now that we have basic idea of how things work together, let's implement each step in details. The first step and very important one, we need to create a free Stripe account. 
 
 ## [Slide 05]
 
-Next, you need go to Apple Pay section of your Stripe account at https://dashboard.stripe.com/account/apple_pay. Create a new application which will trigger a CSR file to be downloaded. After that, navigate to developer portal and find Merchant IDs in Certificates, Identifiers & Profiles section. Create
-a new certificate using using Stripe's CSR file. As a result we'll get a .cer file, which must be uploaded to your Stripe account. As a result, Stripe is now able to decrypt Apple Pay payment objects.
+Next, you need go to Apple Pay section of your Stripe account at https://dashboard.stripe.com/account/apple_pay. Create a new application which will trigger a CSR file to be downloaded. After that, navigate to developer portal and find Merchant IDs in Certificates, Identifiers & Profiles section. Create a new certificate using using Stripe's CSR file. As a result we'll get a .cer file, which must be uploaded to your Stripe account. As a result, Stripe is now able to decrypt Apple Pay payment objects.
 
 ## Talking Head
 
@@ -214,14 +212,11 @@ That's it. As you see there is nothing complicated in integrating Stripe and a s
 
 ## Demo
 
-Now let's run the demo. Again, I'll select the first furniture item. Let's select 2 units of this furniture. Now we want to pay for it. Payment sheet is presented, we check if payment information satisfies us, and now let's authorize the payment. We see that payment is processed, then it change to processing state then done and at the end our confirmation screen is presented. One last thing here is the processing state means that Apple Pay waits for the completion handler to be called after payment was authorized. If it's not called after some amount of time Apple Pay cancels the payment and 
-user must start again.
+Now let's run the demo. Again, I'll select the first furniture item. Let's select 2 units of this furniture. Now we want to pay for it. Payment sheet is presented, we check if payment information satisfies us, and now let's authorize the payment. We see that payment is processed, then it change to processing state then done and at the end our confirmation screen is presented. One last thing here is the processing state means that Apple Pay waits for the completion handler to be called after payment was authorized. If it's not called after some amount of time Apple Pay cancels the payment and user must start again. Now visit your Stripe account at https://dashboard.stripe.com/test/dashboard, and you should see that payment was successfully recorded, 61,98 dollars!
 
 ## Conclusion
 
-Alright, that’s everything I’d like to cover in this video. At this point you should feel comfortable with Apple Pay, starting from basic concepts and enviroment setup, and ending with testing using Apple Pay Sandbox Testing enviroment. If you want to learn more check out Apple Pay Programming Guide webpage: https://developer.apple.com/library/content/ApplePay_Guide/index.html#//apple_ref/doc/uid/TP40014764-CH1-SW1, particularly paying attention to PKPaymentAuthorizationControllerDelegate protocol which has few more methods that can fit your more specific needs.
-
-Actually this screencast could be shorter if Ray would be willing to share his credit card credentials, but he nicely refused :[, arguing that he
-needs money for the Christmas party.
+Alright, that’s everything I’d like to cover in this video. You should now have a strong understanding what a payment processor is and how to deal
+with it, even if it's not Stripe. While the backend in this screencast is very simple, it's enough to point you to the idea of how a real backend fits into the payment architecture.
 
 Bye!
