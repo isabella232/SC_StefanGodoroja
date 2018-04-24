@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		AB2B4D3D1FE1B9CD0007AA01 /* UnitsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB2B4D3C1FE1B9CD0007AA01 /* UnitsViewController.swift */; };
+		AB2CD8C120819F270041B30D /* Stripe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB2CD8C020819F270041B30D /* Stripe.framework */; };
+		AB2CD8C320819F330041B30D /* Stripe.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AB2CD8C020819F270041B30D /* Stripe.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		AB39DA541FD3EE08004F8D95 /* FurnitureDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB39DA531FD3EE08004F8D95 /* FurnitureDataSource.swift */; };
 		AB5EC33A1FD5DF1700017DBC /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5EC3391FD5DF1700017DBC /* StringExtension.swift */; };
 		AB65FC051FD49D2100F4AB42 /* PaymentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB65FC041FD49D2100F4AB42 /* PaymentManager.swift */; };
@@ -63,6 +65,17 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		AB2CD8C420819F330041B30D /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				AB2CD8C320819F330041B30D /* Stripe.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AB65FC301FD4DBC300F4AB42 /* Embed Watch Content */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -77,8 +90,8 @@
 
 /* Begin PBXFileReference section */
 		AB2B4D3C1FE1B9CD0007AA01 /* UnitsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitsViewController.swift; sourceTree = "<group>"; };
+		AB2CD8C020819F270041B30D /* Stripe.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Stripe.framework; path = Shinyture/Stripe.framework; sourceTree = SOURCE_ROOT; };
 		AB39DA531FD3EE08004F8D95 /* FurnitureDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FurnitureDataSource.swift; sourceTree = "<group>"; };
-		AB39DA551FD439C2004F8D95 /* Shinyture.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Shinyture.entitlements; sourceTree = "<group>"; };
 		AB5EC3391FD5DF1700017DBC /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		AB65FC041FD49D2100F4AB42 /* PaymentManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentManager.swift; sourceTree = "<group>"; };
 		AB65FC081FD4B20200F4AB42 /* FurnitureTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FurnitureTableViewCell.swift; sourceTree = "<group>"; };
@@ -142,6 +155,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AB2CD8C120819F270041B30D /* Stripe.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -185,7 +199,6 @@
 			isa = PBXGroup;
 			children = (
 				D2A5F20F1F4A9144005CD714 /* Info.plist */,
-				AB39DA551FD439C2004F8D95 /* Shinyture.entitlements */,
 			);
 			path = Config;
 			sourceTree = "<group>";
@@ -249,6 +262,7 @@
 		ABF4F1F31FD2EBA700AFD6C0 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				AB2CD8C020819F270041B30D /* Stripe.framework */,
 				ABF4F1FE1FD2F4FB00AFD6C0 /* SnapKit */,
 				ABF4F1F41FD2EBC200AFD6C0 /* TwicketSegmentedControl */,
 			);
@@ -354,6 +368,8 @@
 				D2A5F1FD1F4A9144005CD714 /* Frameworks */,
 				D2A5F1FE1F4A9144005CD714 /* Resources */,
 				AB65FC301FD4DBC300F4AB42 /* Embed Watch Content */,
+				AB2CD8C420819F330041B30D /* Embed Frameworks */,
+				AB2CD8C520819F5A0041B30D /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -371,7 +387,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0910;
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = Razeware;
 				TargetAttributes = {
 					D2A5F1FF1F4A9144005CD714 = {
@@ -379,7 +395,7 @@
 						LastSwiftMigration = 0900;
 						SystemCapabilities = {
 							com.apple.ApplePay = {
-								enabled = 1;
+								enabled = 0;
 							};
 						};
 					};
@@ -416,6 +432,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		AB2CD8C520819F5A0041B30D /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "bash \"${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Stripe.framework/integrate-dynamic-framework.sh\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		D2A5F1FC1F4A9144005CD714 /* Sources */ = {
@@ -502,6 +534,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -509,6 +542,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -559,6 +593,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -566,6 +601,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -600,11 +636,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = Shinyture/Config/Shinyture.entitlements;
-				DEVELOPMENT_TEAM = 7YX3D8UMCU;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Shinyture/Libraries",
+					"$(PROJECT_DIR)/Shinyture",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Shinyture/Config/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -621,11 +657,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = Shinyture/Config/Shinyture.entitlements;
-				DEVELOPMENT_TEAM = 7YX3D8UMCU;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Shinyture/Libraries",
+					"$(PROJECT_DIR)/Shinyture",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Shinyture/Config/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

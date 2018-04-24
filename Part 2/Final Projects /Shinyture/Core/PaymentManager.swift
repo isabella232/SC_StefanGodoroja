@@ -42,7 +42,7 @@ class PaymentManager: NSObject {
     
     if let item = item {
       let request = PKPaymentRequest()
-      request.merchantIdentifier = "merchant.rw.shinyture.stefangodoroja"
+      request.merchantIdentifier = "YOUR_MERCHANT_IDENTIFIER"
       request.merchantCapabilities = .capability3DS
       request.countryCode = "US"
       request.currencyCode = "USD"

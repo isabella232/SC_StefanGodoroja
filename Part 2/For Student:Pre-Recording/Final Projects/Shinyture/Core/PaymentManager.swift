@@ -27,6 +27,7 @@
 /// THE SOFTWARE.
 
 import PassKit
+import Stripe
 
 typealias PaymentManagerCompletionHandler = (Bool) -> Void
 
@@ -41,7 +42,7 @@ class PaymentManager: NSObject {
     
     if let item = item {
       let request = PKPaymentRequest()
-      request.merchantIdentifier = "merchant.rw.shinyture.raywenderlich"
+      request.merchantIdentifier = "YOUR_MERCHANT_IDENTIFIER"
       request.merchantCapabilities = .capability3DS
       request.countryCode = "US"
       request.currencyCode = "USD"
@@ -126,7 +127,7 @@ extension PaymentManager: PKPaymentAuthorizationControllerDelegate {
   
   func paymentAuthorizationController(_ controller: PKPaymentAuthorizationController, didAuthorizePayment payment: PKPayment, handler completion: @escaping (PKPaymentAuthorizationResult) -> Void) {
     var errors: [Error] = []
-    
+        
     if let emailAddress = payment.shippingContact?.emailAddress {
       
       if emailAddress.isValidEmail() == false {
@@ -136,12 +137,55 @@ extension PaymentManager: PKPaymentAuthorizationControllerDelegate {
     }
     
     if errors.isEmpty {
-      paymentStatus = .success
+      STPAPIClient.shared().createToken(with: payment) { token, error in
+        
+        if (error != nil) {
+          self.paymentStatus = .failure
+          completion(PKPaymentAuthorizationResult(status: self.paymentStatus, errors: []))
+          
+        } else {
+          let ipAddress = "YOUR_IP_ADDRESS"
+          let url = URL(string: "http://\(ipAddress):5000/pay")
+          var request = URLRequest(url: url!)
+          request.httpMethod = "POST"
+          request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+          request.setValue("application/json", forHTTPHeaderField: "Accept")
+          
+          if let stripeToken = token?.tokenId,
+            let totalAmount = self.paymentItems.first?.amount,
+            let totalDescription = self.paymentItems.first?.description {
+            
+            let body = ["stripeToken": stripeToken,
+                        "amount": totalAmount.multiplying(by: NSDecimalNumber(string: "100")),
+                        "description": totalDescription,
+                        "shipping": [
+                          "city": payment.shippingContact?.postalAddress?.city,
+                          "street": payment.shippingContact?.postalAddress?.street,
+                          "phoneNumber": payment.shippingContact?.phoneNumber?.stringValue]
+              ] as [String : Any]
+            
+            request.httpBody = try? JSONSerialization.data(withJSONObject: body, options: JSONSerialization.WritingOptions())
+          }
+          
+          URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
+            
+            if (error != nil) {
+              self.paymentStatus = .failure
+            } else {
+              self.paymentStatus = .success
+            }
+            
+            completion(PKPaymentAuthorizationResult(status: self.paymentStatus, errors: []))
+            
+          }).resume()
+        }
+      }
+      
     } else {
       paymentStatus = .failure
+      completion(PKPaymentAuthorizationResult(status: paymentStatus, errors: errors))
     }
     
-    completion(PKPaymentAuthorizationResult(status: paymentStatus, errors: errors))
   }
   
   func paymentAuthorizationControllerDidFinish(_ controller: PKPaymentAuthorizationController) {
