@@ -6,7 +6,7 @@ PassKit: Integrate Apple Pay in your app. Part 1.
 
 ## Screencast Description
 
-A showcase of how to implement Apple Pay in an app
+A showcase of how to implement Apple Pay in your app
 and how it authorizes payments.
 
 ## Language, Editor and Platform versions used in this screencast:
@@ -37,7 +37,7 @@ Wow, that's a lot of things, so let's start!
 
 ## [Slide 02] - [Slide 07]
 
-The payment authorization flow starts with checking whether device can make payments using Apple Pay or if it has cards which supports payment networks your app asks for, like Visa or Mastercard. If so then app can create a payment request and present the payment sheet. Your app responds to user interaction from the payment sheet using delegate methods. After user authorized payment request using Touch ID or Face ID, payment information is send to the Secure Element which is a dedicated hardware chip containing card information. Secure Element encrypts payment data using Merchant ID which results in a payment token. This token is passed to Apple Servers, but never stored or accessed there, but merely re-encrypted using Payment Processing certificate. Finally Apple Servers, pass back the payment token to the app. As a conclusion, the payment was successfully authorized and the payment token was created. That token is usually sent to the payment processor for taking actions, and as I said will be discussed in the next screencast.
+The payment authorization flow starts with checking whether device can make payments using Apple Pay or if it has cards which supports payment networks your app asks for, like Visa or Mastercard. If so then app can create a payment request and present the payment sheet. Your app responds to user interaction from the payment sheet using delegate methods. After user authorized payment request using Touch ID or Face ID, payment information is send to the Secure Element which is a dedicated hardware chip containing card information. Secure Element encrypts payment data using Merchant ID which results in a payment token. This token is passed to Apple Servers, but never stored or accessed there, but merely re-encrypted using Payment Processing certificate. Finally Apple Servers, pass back the payment token to the app. As a conclusion, the payment was successfully authorized and the payment token was created. That token is usually sent to the payment processor for taking further actions.
 
 ## Demo
 
@@ -249,7 +249,7 @@ The best way to do it is using Apple Pay Sandbox Testing enviroment. In iTunes C
 
 ## Demo
 
-First, we need to sign in using testing account. Then, we need to add a test card. I'm using
+First, we need to sign in using testing account. Then, we need to add a test card (using Wallet app). I'm using
 
 ```
 MasterCard

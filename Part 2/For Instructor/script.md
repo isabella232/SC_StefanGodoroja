@@ -47,7 +47,7 @@ do other manipulations. But in our case, for the sake of simplicity we'll use a 
 
 ## Demo
 
-First step to setup our local server is to install pip utility which is a package managment system. If it's already installed skip this step.
+First step to setup our local server is to install pip utility which is a package management system. If it's already installed skip this step.
 
 ```
 curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
@@ -73,7 +73,6 @@ The last step is to start the server
 ```
 python shinyture-charge.py
 ```
-
 
 ## Talking Head
 
@@ -143,7 +142,7 @@ call the completion handler with the status and errors.
 ```
 
 
-Inside of createToken(), we'll check if the cretion of Stripe token didn't encounter any errors. If that's true then
+Inside of createToken(), we'll check if the creation of Stripe token didn't encounter any errors. If that's true then
 we update payment status and call the completion handler with that status, also we send an empty array for the errors. 
 
 ```
@@ -155,10 +154,7 @@ we update payment status and call the completion handler with that status, also 
 ```
 
 If Stripe doesn't complain about anything, then we can create a web request using NSMutableURLRequest. Few things to notice here. First, update
-ipAddress constant value. Second, we unwrap stripeToken, totalAmount and totalDescription values, if something is not setup, payment can't be
-finalized. The body constant represent a dictionary which will be transformed into json data. The Stripe method which is called on backend to
-perform the charge, requires 4 values: Stripe token, amount, description and currency code. The last one I've hardcoded on the backend, but the
-first 3 are packed in the body dictionary. Special attention to the amount's value, it's measured in cents. 
+ipAddress constant value. It should match your computer IP address. Second, we unwrap stripeToken, totalAmount and totalDescription values, if something is not setup, payment can't be finalized. The body constant represent a dictionary which will be transformed into json data. The Stripe method which is called on backend to perform the charge, requires 4 values: Stripe token, amount, description and currency code. The last one I've hardcoded on the backend, but the first 3 are packed in the body dictionary. Special attention to the amount's value, it's measured in cents. 
 
 
 ```
@@ -212,11 +208,11 @@ That's it. As you see there is nothing complicated in integrating Stripe and a s
 
 ## Demo
 
-Now let's run the demo. Again, I'll select the first furniture item. Let's select 2 units of this furniture. Now we want to pay for it. Payment sheet is presented, we check if payment information satisfies us, and now let's authorize the payment. We see that payment is processed, then it change to processing state then done and at the end our confirmation screen is presented. One last thing here is the processing state means that Apple Pay waits for the completion handler to be called after payment was authorized. If it's not called after some amount of time Apple Pay cancels the payment and user must start again. Now visit your Stripe account at https://dashboard.stripe.com/test/dashboard, and you should see that payment was successfully recorded, 61,98 dollars!
+Now let's run the demo. Again, I'll select the first furniture item. Let's select 2 units of this furniture. Now we want to pay for it. Payment sheet is presented, we check if payment information satisfies us, and now let's authorize the payment. We see that payment is processed, then it change to processing state then done and at the end our confirmation screen is presented. One last thing here is the processing state means that Apple Pay waits for the completion handler to be called after payment was authorized. If it's not called after some amount of time Apple Pay fails to authorize payment and user must start again. Now visit your Stripe account at https://dashboard.stripe.com/test/dashboard, and you should see that payment was successfully recorded, 61,98 dollars!
 
 ## Conclusion
 
 Alright, that’s everything I’d like to cover in this video. You should now have a strong understanding what a payment processor is and how to deal
-with it, even if it's not Stripe. While the backend in this screencast is very simple, it's enough to point you to the idea of how a real backend fits into the payment architecture.
+with it, even if it's not Stripe. While the backend in this screencast is very simple, it's enough to point you to the idea of how a real backend fits into the payment flow.
 
 Bye!
